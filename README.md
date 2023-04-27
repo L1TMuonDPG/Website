@@ -17,7 +17,7 @@ It is tailored to people working in High Energy Physics that use ROOT (http://ro
         
 1. Clone this repository
 
-        git clone https://github.com/musella/php-plots.git .
+        git clone https://gitlab.cern.ch/cms-analysis/general/php-plots.git .
         
 1. Copy the example/htaccess file into .htaccess and edit its content to suit your needs.
  
@@ -41,6 +41,3 @@ It is tailored to people working in High Energy Physics that use ROOT (http://ro
 
 1. Overlay content of .txt version on mouse hover.
 
-# Example
-
-https://musella.web.cern.ch/musella/php-plots
