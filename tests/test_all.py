@@ -21,7 +21,7 @@ class ExecutablesTest(unittest.TestCase):
 
         self.example_pdf = os.path.join(test_dir, "files", "example.pdf")
 
-    def _touch(self, path):
+    def touch(self, path):
         # the file must not exist
         if os.path.exists(path):
             raise RuntimeError(f"file {path} already exists")
@@ -65,7 +65,7 @@ class ExecutablesTest(unittest.TestCase):
 
         # expect failure
         with tempfile.TemporaryDirectory() as tmp_dir:
-            path = self._touch(os.path.join(tmp_dir, "file.txt"))
+            path = self.touch(os.path.join(tmp_dir, "file.txt"))
 
             with self.assertRaises(RuntimeError):
                 copy_index([path])
@@ -111,8 +111,8 @@ class ExecutablesTest(unittest.TestCase):
             for d in dirs:
                 shutil.copy2(self.example_pdf, d)
             # create additional files
-            self._touch(os.path.join(tmp_src_dir, "l1", "file.txt"))
-            self._touch(os.path.join(tmp_src_dir, "l1", "file.unknown"))
+            self.touch(os.path.join(tmp_src_dir, "l1", "file.txt"))
+            self.touch(os.path.join(tmp_src_dir, "l1", "file.unknown"))
 
             # deploy shallow
             with tempfile.TemporaryDirectory() as tmp_dst_dir:
