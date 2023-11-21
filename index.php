@@ -187,7 +187,7 @@
 
           <form class="d-flex">
             <div class="input-group">
-              <input class="form-control" type="search" name="search" placeholder="Search" aria-label="Search" value="<?php if (isset($_GET["search"])) echo htmlspecialchars($_GET["search"]); ?>">
+              <input class="form-control" type="search" name="search" placeholder="Pattern(s)" aria-label="Search" value="<?php if (isset($_GET["search"])) echo htmlspecialchars($_GET["search"]); ?>">
               <button class="btn btn-outline-success" type="submit">Search</button>
             </div>
           </form>
