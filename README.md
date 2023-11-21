@@ -12,7 +12,7 @@ It can still be accessed through the [`old_version` branch](https://gitlab.cern.
 The main `index.php` file contains a few settings at the top of the file that can be configured according to your needs.
 
 - `$main_extension`: Extension of plot files to show in cards. Defaults to `"png"``.
-- `$additional_extensions`: Additional extensions to link in card footer if existing. Defaults to `("png", "pdf", "cxx", "eps", "root", "txt")`.
+- `$additional_extensions`: Additional extensions to link in card footer if existing. Defaults to `("png", "pdf", "jpg", "jpeg", "gif", "eps", "svg", "root", "cxx", "txt", "rtf", "log", "csv")`.
 - `$search_mode`: The search mode in case one or multiple search patterns are provided. Defaults to `"any"`.
   - `"any"`: Any search pattern must match.
   - `"all"`: All search patterns must match.

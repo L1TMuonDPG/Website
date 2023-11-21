@@ -10,7 +10,9 @@
   $main_extension = "png";
 
   // additional extensions to link in card footer
-  $additional_extensions = array("png", "pdf", "cxx", "eps", "root", "txt");
+  $additional_extensions = array(
+    "png", "pdf", "jpg", "jpeg", "gif", "eps", "svg", "root", "cxx", "txt", "rtf", "log", "csv",
+  );
 
   // search mode in case multiple search strings are used
   // any: any search pattern must match
