@@ -4,7 +4,9 @@ stages:
 lint:
   stage: test
   tags:
-    - cvmfs
+    - docker
+  image:
+    name: python:3.10
   script:
     - pip install -U pip setuptools
     - pip install -r requirements_dev.txt
@@ -13,8 +15,12 @@ lint:
 test:
   stage: test
   tags:
-    - cvmfs
+    - docker
+  image:
+    name: python:3.10
   script:
+    - apt-get -y update
+    - apt-get -y install poppler-utils
     - pip install -U pip setuptools
     - pip install -r requirements_dev.txt
     - pytest tests
