@@ -4,6 +4,9 @@ PHP based plot browser for EOS (sub)directories via web.cern.ch.
 
 For detailed setup and usage instructions, see the [CAT documentation](https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser).
 
+The current project supersedes a previous version of the plot browser `index.php` script.
+It can still be accessed through the [`old_version` branch](https://gitlab.cern.ch/cms-analysis/general/php-plots/-/tree/old_version), however, please mind the potential outdated instructions.
+
 ## Settings of the main `index.php` file
 
 The main `index.php` file contains a few settings at the top of the file that can be configured according to your needs.
