@@ -71,12 +71,7 @@ class ExecutablesTest(unittest.TestCase):
                 copy_index([path])
 
     def test_pdf_to_png(self):
-        from pb_pdf_to_png import pdf_to_png, _has_pdftocairo
-
-        # skip if pdftocairo is not installed
-        if not _has_pdftocairo():
-            print("skipping test_pdf_to_png")
-            return
+        from pb_pdf_to_png import pdf_to_png
 
         # shallow lookup
         with tempfile.TemporaryDirectory() as tmp_dir:
