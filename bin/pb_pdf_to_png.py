@@ -108,7 +108,7 @@ def main() -> None:
         "--recursive",
         "-r",
         action="store_true",
-        help="convert pdg files recursively in all subdirectories",
+        help="convert pdf files recursively in all subdirectories",
     )
     parser.add_argument(
         "--cores",

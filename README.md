@@ -55,7 +55,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --recursive, -r       convert pdg files recursively in all subdirectories
+  --recursive, -r       convert pdf files recursively in all subdirectories
   --cores CORES, -j CORES
                         number of cores to use for parallel conversion
 ```
