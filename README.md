@@ -81,7 +81,7 @@ optional arguments:
                         comma-separated extensions of files to copy; default: ('png', 'pdf', 'jpg', 'jpeg', 'gif', 'eps',
                         'svg', 'root', 'cxx', 'txt', 'rtf', 'log')
   --pdf-to-png, -c      convert pdf files to png
-  --recursive, -r       convert pdg files recursively in all subdirectories
+  --recursive, -r       convert pdf files recursively in all subdirectories
   --cores CORES, -j CORES
                         number of cores to use for parallel conversion of pdf files
 ```
