@@ -1,0 +1,20 @@
+stages:
+  - test
+
+lint:
+  stage: test
+  tags:
+    - cvmfs
+  script:
+    - pip install -U pip setuptools
+    - pip install -r requirements_dev.txt
+    - flake8 bin tests
+
+test:
+  stage: test
+  tags:
+    - cvmfs
+  script:
+    - pip install -U pip setuptools
+    - pip install -r requirements_dev.txt
+    - pytest tests

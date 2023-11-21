@@ -1,43 +1,84 @@
-php-plots
-=========
+# php-plots
 
-PHP based web index for image displaying.
+PHP based plot browser for EOS (sub)directories via web.cern.ch.
 
-Original code from Giovanni Petrucciani (@gpetruc).
+For detailed setup and usage instructions, see the [CAT documentation](https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser).
 
-This project contains a PHP web index script to help visualizing folders with many images.
+## Settings of the main `index.php` file
 
-It is tailored to people working in High Energy Physics that use ROOT (http://root.cern.ch) to produce their plots.
+The main `index.php` file contains a few settings at the top of the file that can be configured according to your needs.
 
-# Setup
+- `$main_extension`: Extension of plot files to show in cards. Defaults to `"png"``.
+- `$additional_extensions`: Additional extensions to link in card footer if existing. Defaults to `("png", "pdf", "cxx", "eps", "root", "txt")`.
+- `$search_mode`: The search mode in case one or multiple search patterns are provided. Defaults to `"any"`.
+  - `"any"`: Any search pattern must match.
+  - `"all"`: All search patterns must match.
+  - `"exact"`: The search pattern must match as is.
 
-1. cd into your web folder
+## Additional scripts
 
-        cd <my-path>
-        
-1. Clone this repository
+The `index.php` file is meant to be copied (or symlinked) into every subdirectory that should have a plot browser.
+In addition, plots for your analysis location might need to be copied into a `www` directory in your EOS user space from where website content can be served.
+A handful of scripts (prefixed with `pb` for plot browser) are provided to help you with the deployment of files.
 
-        git clone https://gitlab.cern.ch/cms-analysis/general/php-plots.git .
-        
-1. Copy the example/htaccess file into .htaccess and edit its content to suit your needs.
- 
-        cp -p example/htaccess .htaccess
-        $EDITOR .htacces
+### `bin/pb_copy_index.py`
 
-1. Open the web folder into your browser.
+```shell
+> pb_copy_index.py --help
 
-1. Enjoy.
+usage: pb_copy_index.py [-h] [--recursive] directories [directories ...]
 
+Copies the index.php file of the plot browser to various directories.
 
-# Features
+positional arguments:
+  directories      the directories to copy the index.php file to
 
-1. Detect if a file is present with multiple formats.
+optional arguments:
+  -h, --help       show this help message and exit
+  --recursive, -r  copy the index.php file recursively into all subdirectories
+```
 
-1. Filter files to be selected with wild-cards or regex.
+### `bin/pb_pdf_to_png.py`
 
-1. Zoom in/out images with double-click.
+```shell
+> pb_pdf_to_png.py --help
 
-1. Rearrange images with drag and drop.
+usage: pb_pdf_to_png.py [-h] [--recursive] [--cores CORES] paths [paths ...]
 
-1. Overlay content of .txt version on mouse hover.
+Converts one or multiple pdf files to png using "pdftocairo".
 
+positional arguments:
+  paths                 files to convert or directories to check for pdf files
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --recursive, -r       convert pdg files recursively in all subdirectories
+  --cores CORES, -j CORES
+                        number of cores to use for parallel conversion
+```
+
+### `bin/pb_deploy_plots.py`
+
+```shell
+> pb_deploy_plots.py --help
+
+usage: pb_deploy_plots.py [-h] [--extensions EXTENSIONS] [--pdf-to-png] [--recursive] [--cores CORES]
+                          sources [sources ...] destination
+
+Copies images recursively to a target directory, adds plot browser index files to all newly created directories, and optionally
+converts pdf files to png.
+
+positional arguments:
+  sources               source files or directories to check for plots
+  destination           target directory to copy files to
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --extensions EXTENSIONS, -e EXTENSIONS
+                        comma-separated extensions of files to copy; default: ('png', 'pdf', 'jpg', 'jpeg', 'gif', 'eps',
+                        'svg', 'root', 'cxx', 'txt', 'rtf', 'log')
+  --pdf-to-png, -c      convert pdf files to png
+  --recursive, -r       convert pdg files recursively in all subdirectories
+  --cores CORES, -j CORES
+                        number of cores to use for parallel conversion of pdf files
+```
