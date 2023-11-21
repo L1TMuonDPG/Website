@@ -45,7 +45,6 @@ class ExecutablesTest(unittest.TestCase):
 
     def test_copy_index(self):
         from pb_copy_index import copy_index
-        return
 
         # shallow copy
         with tempfile.TemporaryDirectory() as tmp_dir:
