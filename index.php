@@ -115,6 +115,12 @@
         padding: 0.4rem;
       }
 
+      #footer {
+        font-size: 0.75rem;
+        padding: 0px 10px 5px 10px;
+        background-color: white;
+      }
+
       @media screen and (min-width: 1200px) {
         #plot-listing .card {
           max-width: 350px;
@@ -325,6 +331,13 @@
     <!-- scroll-to-top button -->
     <div class="container-fluid">
       <button type="button" class="btn btn-outline-primary btn-sm" id="scroll-top">To top</button>
+    </div>
+
+    <!-- footer -->
+    <div id="footer" class="position-absolute bottom-0 end-0">
+      <a href="https://gitlab.cern.ch/cms-analysis/general/php-plots"><i class="bi bi-code-slash"></i> Plot browser</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a href="https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser"><i class="bi bi-info-circle"></i> Documentation</a>
     </div>
 
     <!-- include third-party scripts via cdns -->
