@@ -1,17 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Copies images recursively to a target directory, adds plot browser index files to all newly created
 directories, and optionally converts pdf files to png.
 """
 
-from __future__ import annotations
-
 import os
 import glob
 import shutil
 from collections import deque
-from typing import Sequence
+from typing import Sequence, Union, Optional
 
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,9 +17,9 @@ repo_dir = os.path.dirname(this_dir)
 
 
 def deploy_plots(
-    sources: list[str] | str,
+    sources: Union[Sequence[str], str],
     destination: str,
-    extensions: Sequence[str] | None = None,
+    extensions: Optional[Sequence[str]] = None,
     convert_pdf: bool = False,
     recursive: bool = False,
     n_cores: int = 1,

@@ -1,22 +1,21 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Copies the index.php file of the plot browser to various directories.
 """
 
-from __future__ import annotations
-
 import os
 import glob
 import shutil
 from collections import deque
+from typing import Sequence, Union
 
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 repo_dir = os.path.dirname(this_dir)
 
 
-def copy_index(directories: list[str] | str, recursive: bool = False) -> None:
+def copy_index(directories: Union[Sequence[str], str], recursive: bool = False) -> None:
     if isinstance(directories, str):
         directories = [directories]
 

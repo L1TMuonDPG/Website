@@ -1,23 +1,26 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Converts one or multiple pdf files to png using "pdftocairo".
 """
-
-from __future__ import annotations
 
 import os
 import glob
 import subprocess
 from multiprocessing import Pool
 from collections import deque
+from typing import Sequence, Union, Tuple
 
 
 this_dir = os.path.dirname(os.path.abspath(__file__))
 repo_dir = os.path.dirname(this_dir)
 
 
-def pdf_to_png(paths: list[str] | str, recursive: bool = False, n_cores: int = 1) -> None:
+def pdf_to_png(
+    paths: Union[Sequence[str], str],
+    recursive: bool = False,
+    n_cores: int = 1,
+) -> None:
     if isinstance(paths, str):
         paths = [paths]
 
@@ -53,7 +56,13 @@ def pdf_to_png(paths: list[str] | str, recursive: bool = False, n_cores: int = 1
 
 def _has_pdftocairo() -> bool:
     # check via "type"
-    p = subprocess.run("type pdftocairo", shell=True, executable="/bin/bash", capture_output=True)
+    p = subprocess.run(
+        "type pdftocairo",
+        shell=True,
+        executable="/bin/bash",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     return p.returncode == 0
 
@@ -69,18 +78,24 @@ def convert_pdf(src: str, dst: str) -> None:
     cmd = f"pdftocairo -singlefile -cropbox -png \"{src}\" \"{dst}\""
 
     # convert it
-    p = subprocess.run(cmd, shell=True, executable="/bin/bash", capture_output=True)
+    p = subprocess.run(
+        cmd,
+        shell=True,
+        executable="/bin/bash",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
     # handle response
     if p.returncode != 0:
         raise RuntimeError(f"command failed with exit code {p.returncode}: {p.stderr}")
 
 
-def convert_pdf_mp(arg: tuple[str, str]) -> None:
+def convert_pdf_mp(arg: Tuple[str, str]) -> None:
     return convert_pdf(*arg)
 
 
-def convert_pdfs(paths: list[tuple[str, str]], n_cores: int = 1) -> None:
+def convert_pdfs(paths: Sequence[Tuple[str, str]], n_cores: int = 1) -> None:
     print(f"converting {len(paths)} pdf file(s) ...")
 
     if n_cores <= 1:
