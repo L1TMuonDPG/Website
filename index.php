@@ -116,9 +116,13 @@
       }
 
       #footer {
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
+        padding: 8px;
         font-size: 0.75rem;
-        padding: 0px 10px 5px 10px;
-        background-color: white;
+        background-color: rgba(255,255,255,0.8);
+        border-radius: 4px;
       }
 
       @media screen and (min-width: 1200px) {
@@ -334,7 +338,7 @@
     </div>
 
     <!-- footer -->
-    <div id="footer" class="position-absolute bottom-0 end-0">
+    <div id="footer">
       <a href="https://gitlab.cern.ch/cms-analysis/general/php-plots"><i class="bi bi-code-slash"></i> Plot browser</a>
       &nbsp;&nbsp;|&nbsp;&nbsp;
       <a href="https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser"><i class="bi bi-info-circle"></i> Documentation</a>
