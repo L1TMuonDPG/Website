@@ -1,0 +1,26 @@
+stages:
+  - test
+
+lint:
+  stage: test
+  tags:
+    - docker
+  image:
+    name: python:3.10
+  script:
+    - pip install -U pip setuptools
+    - pip install -r requirements_dev.txt
+    - flake8 bin tests
+
+test:
+  stage: test
+  tags:
+    - docker
+  image:
+    name: python:3.10
+  script:
+    - apt-get -y update
+    - apt-get -y install poppler-utils
+    - pip install -U pip setuptools
+    - pip install -r requirements_dev.txt
+    - pytest tests

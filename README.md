@@ -1,43 +1,95 @@
-php-plots
-=========
+# php-plots ![Python version](https://img.shields.io/badge/Python-%E2%89%A53.6-blue)
 
-PHP based web index for image displaying.
+PHP based plot browser for EOS (sub)directories via web.cern.ch.
 
-Original code from Giovanni Petrucciani (@gpetruc).
+For detailed setup and usage instructions, see the [CAT documentation](https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser).
 
-This project contains a PHP web index script to help visualizing folders with many images.
+The current project supersedes a previous version of the plot browser `index.php` script.
+It can still be accessed through the [`old_version` branch](https://gitlab.cern.ch/cms-analysis/general/php-plots/-/tree/old_version), however, please mind the potential outdated instructions.
 
-It is tailored to people working in High Energy Physics that use ROOT (http://root.cern.ch) to produce their plots.
+## Settings of the main `index.php` file
 
-# Setup
+The main `index.php` file contains a few settings at the top of the file that can be configured according to your needs.
 
-1. cd into your web folder
+- `$main_extension`: Extension of plot files to show in cards. Defaults to `"png"`.
+- `$additional_extensions`: Additional extensions to link in card footer if existing. Defaults to `("png", "pdf", "jpg", "jpeg", "gif", "eps", "svg", "root", "cxx", "txt", "rtf", "log", "csv")`.
+- `$search_mode`: The search mode in case one or multiple search patterns are provided. Defaults to `"any"`.
+    - `"any"`: Any search pattern must match.
+    - `"all"`: All search patterns must match.
+    - `"exact"`: The search pattern must match as is.
 
-        cd <my-path>
-        
-1. Clone this repository
+## Additional scripts
 
-        git clone https://gitlab.cern.ch/cms-analysis/general/php-plots.git .
-        
-1. Copy the example/htaccess file into .htaccess and edit its content to suit your needs.
- 
-        cp -p example/htaccess .htaccess
-        $EDITOR .htacces
+A handful of scripts (prefixed with `pb` for plot browser) are provided to help you with the deployment of files.
 
-1. Open the web folder into your browser.
+### `bin/pb_copy_index.py`
 
-1. Enjoy.
+The `index.php` file is meant to be copied into every subdirectory that should have plot browsing capabilities when visited.
+You can use the `pb_copy_index.py` script to (recursively) copy the file into specific directories.
 
+```shell
+> pb_copy_index.py --help
 
-# Features
+usage: pb_copy_index.py [-h] [--recursive] directories [directories ...]
 
-1. Detect if a file is present with multiple formats.
+Copies the index.php file of the plot browser to various directories.
 
-1. Filter files to be selected with wild-cards or regex.
+positional arguments:
+  directories      the directories to copy the index.php file to
 
-1. Zoom in/out images with double-click.
+optional arguments:
+  -h, --help       show this help message and exit
+  --recursive, -r  copy the index.php file recursively into all subdirectories
+```
 
-1. Rearrange images with drag and drop.
+### `bin/pb_pdf_to_png.py`
 
-1. Overlay content of .txt version on mouse hover.
+Many plotting pipelines produce only pdf files, however, it can often be helpful to also have accompanying png files stored next to them.
+This is also true for the plot browser, which is way faster at showing simple png files compared to rendering many pdf files inside your web browser.
+You can use the `pb_pdf_to_png.py` script to convert multiple pdf files at once, optionally recursively in all subdirectories of a given path.
 
+```shell
+> pb_pdf_to_png.py --help
+
+usage: pb_pdf_to_png.py [-h] [--recursive] [--cores CORES] paths [paths ...]
+
+Converts one or multiple pdf files to png using "pdftocairo".
+
+positional arguments:
+  paths                 files to convert or directories to check for pdf files
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --recursive, -r       convert pdf files recursively in all subdirectories
+  --cores CORES, -j CORES
+                        number of cores to use for parallel conversion
+```
+
+### `bin/pb_deploy_plots.py`
+
+If you produce your plots at a location that is not within a directory accessible through a public website (e.g. `www`), the typical workflow is to copy multiple files somewhere into your `www` directory while potentially preserving directory structures.
+This can be achieved with the `pb_deploy_plots.py` script which, in addition, also copies the `index.php` file into any newly created subdirectory and optionally also converts pdf into png files.
+
+```shell
+> pb_deploy_plots.py --help
+
+usage: pb_deploy_plots.py [-h] [--extensions EXTENSIONS] [--pdf-to-png] [--recursive] [--cores CORES]
+                          sources [sources ...] destination
+
+Copies images recursively to a target directory, adds plot browser index files to all newly created directories, and optionally
+converts pdf files to png.
+
+positional arguments:
+  sources               source files or directories to check for plots
+  destination           target directory to copy files to
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --extensions EXTENSIONS, -e EXTENSIONS
+                        comma-separated extensions of files to copy; default: ('png', 'pdf', 'jpg', 'jpeg', 'gif', 'eps',
+                        'svg', 'root', 'cxx', 'txt', 'rtf', 'log')
+  --pdf-to-png, -c      convert pdf files to png
+  --recursive, -r       convert pdf files recursively in all subdirectories
+  --cores CORES, -j CORES
+                        number of cores to use for parallel conversion of pdf files
+```
