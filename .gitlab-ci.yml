@@ -1,26 +1,27 @@
 stages:
-  - test
-
+- test
 lint:
   stage: test
-  tags:
-    - docker
   image:
     name: python:3.10
   script:
-    - pip install -U pip setuptools
-    - pip install -r requirements_dev.txt
-    - flake8 bin tests
-
+  - pip install -U pip setuptools
+  - pip install -r requirements_dev.txt
+  - flake8 bin tests
 test:
   stage: test
-  tags:
-    - docker
   image:
     name: python:3.10
   script:
-    - apt-get -y update
-    - apt-get -y install poppler-utils
-    - pip install -U pip setuptools
-    - pip install -r requirements_dev.txt
-    - pytest tests
+  - apt-get -y update
+  - apt-get -y install poppler-utils
+  - pip install -U pip setuptools
+  - pip install -r requirements_dev.txt
+  - pytest tests
+
+# Centrally supported security scanning
+# See https://gitlab.docs.cern.ch/docs/Secure%20your%20application/sast
+sast:
+  stage: test
+include:
+- template: Security/SAST.gitlab-ci.yml
