@@ -224,11 +224,12 @@
       <h4><a id="directories">Directories</a></h4>
       <?
         $dir_names = array();
-        foreach (glob("*") as $dir_name) {
+        foreach (glob("$rel_dir/*") as $dir_name) {
           if (!is_dir($dir_name) || !show_entry($dir_name)) {
             continue;
           }
-          array_push($dir_names, $dir_name);
+          $dir_name_split = explode("/", $dir_name);
+          array_push($dir_names, end($dir_name_split));
         }
         if (count($dir_names) == 0) {
           echo "<span class=\"empty-text\">No directories to display</span>";
