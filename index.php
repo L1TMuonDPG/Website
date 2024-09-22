@@ -6,12 +6,15 @@
   // settings
   //
 
-  // extension of files to show in cards
-  $main_extension = "png";
+  // extension of files to consider as plots
+  // (those that can be used as src attribute in img tags)
+  $plot_extensions = array(
+    "png", "pdf", "jpg", "jpeg", "gif", "PNG", "PDF", "JPG", "JPEG", "GIF",
+  );
 
   // additional extensions to link in card footer
   $additional_extensions = array(
-    "png", "pdf", "jpg", "jpeg", "gif", "eps", "svg", "root", "cxx", "txt", "rtf", "log", "csv",
+    "eps", "svg", "root", "cxx", "txt", "rtf", "log", "csv", "EPS", "SVG", "ROOT", "CXX", "TXT", "RTF", "LOG", "CSV",
   );
 
   // search mode in case multiple search strings are used
@@ -225,11 +228,10 @@
       <?
         $dir_names = array();
         foreach (glob("$rel_dir/*") as $dir_name) {
-          if (!is_dir($dir_name) || !show_entry($dir_name)) {
-            continue;
+          if (is_dir($dir_name)) {
+            $dir_name_split = explode("/", $dir_name);
+            array_push($dir_names, end($dir_name_split));
           }
-          $dir_name_split = explode("/", $dir_name);
-          array_push($dir_names, end($dir_name_split));
         }
         if (count($dir_names) == 0) {
           echo "<span class=\"empty-text\">No directories to display</span>";
@@ -249,55 +251,71 @@
       <h4><a id="plots">Plots</a></h4>
       <div class="d-flex align-content-start flex-wrap">
         <?
+          // scan through all extensions and collect files in two arrays
+          // nested: file_name -> extensions
+          // flag: all covered paths
+          $nested_files = array();
           $covered_files = array();
           $plot_names = array();
-          foreach (glob("*.$main_extension") as $plot_name) {
-            if (!is_file($plot_name) || !show_entry($plot_name)) {
-              continue;
+          foreach ($plot_extensions as $ext) {
+            foreach (glob("$rel_dir/*.$ext") as $file_path) {
+              if (!is_file($file_path) || !show_entry($file_path)) {
+                continue;
+              }
+              $file_path_split = explode("/", $file_path);
+              $file_name = substr(end($file_path_split), 0, -1 * (strlen($ext) + 1));
+              if (!array_key_exists($file_name, $nested_files)) {
+                $nested_files[$file_name] = [];
+              }
+              $nested_files[$file_name][] = $ext;
+              $covered_files[] = $file_path;
             }
-            array_push($plot_names, $plot_name);
           }
-          if (count($plot_names) == 0) {
+          // extend files that have at least one plot exist with additional extensions
+          foreach(array_keys($nested_files) as $file_name) {
+            foreach ($additional_extensions as $ext) {
+              $file_path = "$rel_dir/$file_name.$ext";
+              if (file_exists("$file_path")) {
+                $nested_files[$file_name][] = $ext;
+                $covered_files[] = $file_path;
+              }
+            }
+          }
+          // show plots
+          if (count($nested_files) == 0) {
             echo "<span class=\"empty-text\">No plots to display</span>";
           } else {
-            sort($plot_names);
-            foreach ($plot_names as $plot_name) {
-              array_push($covered_files, $plot_name);
-              echo "<div class=\"card text-center\">";
+            // sort by name
+            $file_names = array_keys($nested_files);
+            sort($file_names);
+            foreach ($file_names as $file_name) {
+              foreach ($nested_files[$file_name] as $i => $ext) {
+                $file_path = "$file_name.$ext";
 
-              echo "  <div class=\"card-header\">";
-              echo "    <a href=\"" . htmlspecialchars($plot_name) . "\">" . htmlspecialchars(substr($plot_name, 0, -4)) . "</a>";
-              echo "  </div>";
-              echo "  <a href=\"" . htmlspecialchars($plot_name) . "\">";
-              echo "    <img class=\"card-img-top\" src=\"" . htmlspecialchars($plot_name) . "\">";
-              echo "  </a>";
-              echo "  <div class=\"card-footer\">";
-              echo "    <p class=\"card-text\">";
-
-              $extension_links = array();
-              foreach ($additional_extensions as $ext) {
-                $other = str_replace(".$main_extension", ".$ext", $plot_name);
-                if (file_exists($other) && show_entry($other)) {
-                  array_push($covered_files, $other);
-                  $badge_style = "secondary";
-                  if ($ext == "png") {
-                    $badge_style = "primary";
-                  } else if ($ext == "pdf") {
-                    $badge_style = "info";
-                  } else if ($ext == "root") {
-                    $badge_style = "dark";
-                  } else if ($ext == "txt") {
-                    $badge_style = "light";
-                  }
-                  array_push($extension_links, "<a href=\"$other\" class=\"badge rounded-pill bg-$badge_style\">$ext</a>");
+                // beginning of the card container, knowing that the first file is always a plot
+                if ($i == 0) {
+                  echo "<div class=\"card text-center\">";
+                  echo "  <div class=\"card-header\">";
+                  echo "    <a href=\"$file_path\">$file_name</a>";
+                  echo "  </div>";
+                  echo "  <a href=\"$file_path\">";
+                  echo "    <img class=\"card-img-top\" src=\"$file_path\">";
+                  echo "  </a>";
+                  echo "  <div class=\"card-footer\">";
+                  echo "    <p class=\"card-text\">";
                 }
+                // list all available extensions in footer
+                $badge_style = "secondary";
+                if ($ext == "png") {
+                  $badge_style = "primary";
+                } else if ($ext == "pdf") {
+                  $badge_style = "info";
+                } else if ($ext == "root") {
+                  $badge_style = "dark";
+                }
+                echo "      <a href=\"$file_path\" class=\"badge rounded-pill bg-$badge_style\">$ext</a>";
               }
-              if (count($extension_links) == 0) {
-                echo "<i>No other file extensions</i>";
-              } else {
-                echo implode(" ", $extension_links);
-              }
-
+              // finish the card container
               echo "    </p>";
               echo "  </div>";
               echo "</div>";
@@ -312,12 +330,13 @@
       <h4><a id="files">Other files</a></h4>
       <?
         $file_names = array();
-        foreach (glob("*") as $file_name) {
+        foreach (glob("$rel_dir/*") as $file_name) {
           // skip directories, index files, files already shown above, and manually skipped ones
           if (!is_file($file_name) || $file_name == "index.php" || !show_entry($file_name) || in_array($file_name, $covered_files)) {
             continue;
           }
-          array_push($file_names, $file_name);
+          $file_name_split = explode("/", $file_name);
+          $file_names[] = end($file_name_split);
         }
 
         if (count($file_names) == 0) {
