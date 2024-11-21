@@ -1,7 +1,6 @@
 <?
   // authors: Marcel Rieger, Clemens Lange, based on the original work by P. Musella and improvements by G. Petrucciani
   // see https://gitlab.cern.ch/cms-analysis/general/php-plots for more info
-
   //
   // settings
   //
@@ -17,6 +16,8 @@
     "eps", "svg", "root", "cxx", "txt", "rtf", "log", "csv", "EPS", "SVG", "ROOT", "CXX", "TXT", "RTF", "LOG", "CSV",
   );
 
+  // Maximum depth for recursive plot search (0 = current directory only)
+  $max_plot_depth = isset($_GET["depth"]) ? intval($_GET["depth"]) : 0;
 
   //
   // helpers
@@ -201,6 +202,16 @@
             </li>
           </ul>
           <form class="d-flex">
+            <div class="input-group me-2">
+              <span class="input-group-text">Depth</span>
+              <a class="btn btn-outline-secondary" href="?depth=<?php echo max(0, ($max_plot_depth - 1)); ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?><?php echo isset($_GET['search_pattern_mode']) ? '&search_pattern_mode=' . urlencode($_GET['search_pattern_mode']) : ''; ?>">
+                <i class="bi bi-dash"></i>
+              </a>
+              <span class="input-group-text"><?php echo $max_plot_depth; ?></span>
+              <a class="btn btn-outline-secondary" href="?depth=<?php echo $max_plot_depth + 1; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?><?php echo isset($_GET['search_pattern_mode']) ? '&search_pattern_mode=' . urlencode($_GET['search_pattern_mode']) : ''; ?>">
+                <i class="bi bi-plus"></i>
+              </a>
+            </div>
             <div class="input-group">
               <div style="position:relative">
                 <input class="form-control" type="search" name="search" placeholder="Pattern(s)" aria-label="Search" value="<?php if (isset($_GET["search"])) echo htmlspecialchars($_GET["search"]); ?>">
@@ -275,28 +286,59 @@
     <!-- list plots -->
     <div id="plot-listing" class="container-fluid">
       <h4><a id="plots">Plots</a></h4>
-      <div class="d-flex align-content-start flex-wrap">
-        <?
-          // scan through all extensions and collect files in two arrays
-          // nested: file_name -> extensions
-          // flag: all covered paths
-          $nested_files = array();
-          $covered_files = array();
-          $plot_names = array();
-          foreach ($plot_extensions as $ext) {
-            foreach (glob("$rel_dir/*.$ext") as $file_path) {
-              if (!is_file($file_path) || !show_entry($file_path)) {
-                continue;
-              }
-              $file_path_split = explode("/", $file_path);
-              $file_name = substr(end($file_path_split), 0, -1 * (strlen($ext) + 1));
-              if (!array_key_exists($file_name, $nested_files)) {
-                $nested_files[$file_name] = [];
-              }
-              $nested_files[$file_name][] = $ext;
-              $covered_files[] = $file_path;
+    <div class="d-flex align-content-start flex-wrap">
+      <?
+    function glob_recursive($pattern, $depth, $rel_dir) {
+        if ($depth < 0) return array();
+
+        // Get absolute path of current working directory 
+        $base_path = realpath('.');
+
+        // Adjust pattern for root directory case
+        $search_pattern = ($rel_dir === '') ? './' . basename($pattern) : $pattern;
+
+        // Get files at current level
+        $files = glob($search_pattern);
+        if ($depth == 0) return $files;
+
+        // Get subdirectories and their contents
+        $dir_pattern = ($rel_dir === '') ? './*' : dirname($pattern).'/*';
+        foreach (glob($dir_pattern, GLOB_ONLYDIR) as $dir) {
+            // Skip hidden directories and ensure we stay within base path
+            $dir_name = basename($dir);
+            if ($dir_name[0] !== '.' && $dir_name[0] !== '_' && strpos(realpath($dir), $base_path) === 0) {
+                $sub_pattern = $dir.'/'.basename($pattern);
+                $sub_files = glob_recursive($sub_pattern, $depth - 1, $rel_dir);
+                $files = array_merge($files, $sub_files);
             }
+        }
+        return $files;
+    }
+
+        // scan through all extensions and collect files in two arrays
+        // nested: file_name -> extensions
+        // flag: all covered paths
+        $nested_files = array();
+      $covered_files = array();
+      $plot_names = array();
+      foreach ($plot_extensions as $ext) {
+          foreach (glob_recursive("$rel_dir/*.$ext", $max_plot_depth, $rel_dir) as $file_path) {
+              if (!is_file($file_path) || !show_entry($file_path)) {
+                  continue;
+              }
+              // Clean the path to remove ./ and ensure correct relative paths
+              $file_path_clean = preg_replace('#^\./|^' . $rel_dir . '/#', '', $file_path);
+              $file_name = pathinfo($file_path_clean, PATHINFO_FILENAME);
+              $file_dir = dirname($file_path_clean);
+              $display_path = $file_dir == '.' ? $file_name : "$file_dir/$file_name";
+              
+              if (!array_key_exists($display_path, $nested_files)) {
+                  $nested_files[$display_path] = [];
+              }
+              $nested_files[$display_path][] = $ext;
+              $covered_files[] = $file_path_clean;
           }
+      }
           // extend files that have at least one plot exist with additional extensions
           foreach(array_keys($nested_files) as $file_name) {
             foreach ($additional_extensions as $ext) {
