@@ -50,6 +50,7 @@ function show_entry($name) {
     <!-- include third-party style sheets via cdns -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
     <!-- minimal custom styles -->
     <style type="text/css">
@@ -128,6 +129,18 @@ function show_entry($name) {
         #plot-listing .card {
           max-width: 202px;
         }
+      }
+
+      .sortable-card {
+        cursor: grab;
+        margin-bottom: 1rem;
+      }
+
+      .ui-state-highlight {
+        height: 350px;
+        background-color: #f0f0f0;
+        border: 2px dashed #007bff;
+        margin: 5px;
       }
     </style>
 
@@ -251,7 +264,7 @@ function show_entry($name) {
     <!-- list plots -->
     <div id="plot-listing" class="container-fluid">
       <h4><a id="plots">Plots</a></h4>
-    <div class="d-flex align-content-start flex-wrap">
+    <div id="sortable" class="d-flex align-content-start flex-wrap">
       <?
     function glob_recursive(string $pattern, int $depth, string $rel_dir): array {
         if ($depth < 0) return [];
@@ -308,7 +321,7 @@ function show_entry($name) {
 
                 // beginning of the card container, knowing that the first file is always a plot
                 if ($i == 0) {
-                  echo "<div class=\"card text-center\">";
+                  echo "<div class=\"card text-center sortable-card\">";
                   echo "  <div class=\"card-header\">";
                   echo "    <a href=\"$file_path\">$file_name</a>";
                   echo "  </div>";
@@ -409,8 +422,9 @@ function show_entry($name) {
       <a href="https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser"><i class="bi bi-info-circle"></i> Documentation</a>
     </div>
     <!-- include third-party scripts via cdns -->
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
 
     <!-- inline scripts -->
     <script>
@@ -419,6 +433,15 @@ function show_entry($name) {
         $("#scroll-top").click(function() {
           window.scrollTo({top: 0, behavior: "smooth"});
         });
+      });
+
+      $(function () {
+          $("#sortable").sortable({
+              placeholder: "ui-state-highlight",
+              items: ".sortable-card",
+              cursor: "move"
+          });
+          $("#sortable").disableSelection();
       });
     </script>
   </body>
