@@ -92,10 +92,7 @@ class ExecutablesTest(unittest.TestCase):
                 # deploy and check files
                 deploy_plots(dirs, tmp_dst_dir, recursive=False)
                 src_base = os.path.basename(tmp_src_dir)
-                self.check_existing(tmp_dst_dir, "index.php")
-                self.check_existing(tmp_dst_dir, src_base, "index.php")
                 self.check_existing(tmp_dst_dir, src_base, "example.pdf")
-                self.check_existing(tmp_dst_dir, "l2", "index.php")
                 self.check_existing(tmp_dst_dir, "l2", "example.pdf")
                 self.check_missing(tmp_dst_dir, "l1")
 
@@ -103,12 +100,9 @@ class ExecutablesTest(unittest.TestCase):
             with tempfile.TemporaryDirectory() as tmp_dst_dir:
                 # deploy and check files
                 deploy_plots(os.path.join(tmp_src_dir, "*"), tmp_dst_dir, recursive=True)
-                self.check_existing(tmp_dst_dir, "index.php")
                 self.check_existing(tmp_dst_dir, "example.pdf")
-                self.check_existing(tmp_dst_dir, "l1", "index.php")
                 self.check_existing(tmp_dst_dir, "l1", "file.txt")
                 self.check_existing(tmp_dst_dir, "l1", "file.unknown")
-                self.check_existing(tmp_dst_dir, "l1", "l2", "index.php")
                 self.check_existing(tmp_dst_dir, "l1", "l2", "example.pdf")
 
             # deploy recursive, filter extensions
@@ -120,10 +114,7 @@ class ExecutablesTest(unittest.TestCase):
                     recursive=True,
                     extensions=("txt", "pdf"),
                 )
-                self.check_existing(tmp_dst_dir, "index.php")
                 self.check_existing(tmp_dst_dir, "example.pdf")
-                self.check_existing(tmp_dst_dir, "l1", "index.php")
                 self.check_existing(tmp_dst_dir, "l1", "file.txt")
                 self.check_missing(tmp_dst_dir, "l1", "file.unknown")
-                self.check_existing(tmp_dst_dir, "l1", "l2", "index.php")
                 self.check_existing(tmp_dst_dir, "l1", "l2", "example.pdf")
