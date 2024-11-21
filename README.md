@@ -18,6 +18,14 @@ The main `index.php` file contains a few settings at the top of the file that ca
     - `"all"`: All search patterns must match.
     - `"exact"`: The search pattern must match as is.
 
+## Local deployment and development
+
+```shell
+docker run --rm -p 8080:80 -v "$PWD":/var/www/html/ php:8.2-apache
+```
+
+Then access the page at <http://localhost:8080/>.
+
 ## Additional scripts
 
 A handful of scripts (prefixed with `pb` for plot browser) are provided to help you with the deployment of files.

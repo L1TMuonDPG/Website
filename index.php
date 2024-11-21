@@ -17,12 +17,6 @@
     "eps", "svg", "root", "cxx", "txt", "rtf", "log", "csv", "EPS", "SVG", "ROOT", "CXX", "TXT", "RTF", "LOG", "CSV",
   );
 
-  // search mode in case multiple search strings are used
-  // any: any search pattern must match
-  // all: all search patterns must match
-  // exact: the search pattern must match as is
-  $search_pattern_mode = "any";
-
 
   //
   // helpers
@@ -31,7 +25,16 @@
   // function that decides whether an entry given by its name is shown,
   // considering the name itself and optional search strings
   function show_entry($name) {
-    global $search_pattern_mode;
+    // search mode in case multiple search strings are used
+    // any: any search pattern must match
+    // all: all search patterns must match
+    // exact: the search pattern must match as is
+    // default: any
+    if (!isset($_GET["search_pattern_mode"])) {
+      $search_pattern_mode = "any";
+    } else {
+      $search_pattern_mode = $_GET["search_pattern_mode"];
+    }
 
     // always hide entries starting with "." or "_"
     if (substr($name, 0, 1) == "." || substr($name, 0, 1) == "_") {
@@ -172,9 +175,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <nav aria-label="breadcrumb">
@@ -185,6 +186,8 @@
 
                     // path fragments
                     $rel_dir = trim(preg_replace("/(.*)\?.*/i", "$1", $_SERVER["REQUEST_URI"]), "/");
+                    // $rel_url_dir = trim(preg_replace("/(.*)\?.*/i", "$1", $_SERVER["REQUEST_URI"]), "/");
+                    // $rel_dir = getcwd() + "/" + $rel_url_dir;
                     if ($rel_dir != "") {
                       $fragments = explode("/", $rel_dir);
                       foreach($fragments as $i=>$fragment) {
@@ -197,10 +200,22 @@
               </nav>
             </li>
           </ul>
-
           <form class="d-flex">
             <div class="input-group">
-              <input class="form-control" type="search" name="search" placeholder="Pattern(s)" aria-label="Search" value="<?php if (isset($_GET["search"])) echo htmlspecialchars($_GET["search"]); ?>">
+              <div style="position:relative">
+                <input class="form-control" type="search" name="search" placeholder="Pattern(s)" aria-label="Search" value="<?php if (isset($_GET["search"])) echo htmlspecialchars($_GET["search"]); ?>">
+                <?php if (isset($_GET["search"]) && !empty($_GET["search"])): ?>
+                  <button type="button" class="btn btn-sm position-absolute" style="right:8px; top:50%; transform:translateY(-50%)" onclick="this.previousElementSibling.value='';this.closest('form').submit()">
+                    <i class="bi bi-x"></i>
+                  </button>
+                <?php endif; ?>
+              </div>
+            </div>
+              <select class="btn btn-secondary bootstrap-select" name="search_pattern_mode" type="button" aria-expanded="false">
+                <option value="any" <?php echo (!isset($_GET["search_pattern_mode"]) || $_GET["search_pattern_mode"] == "any") ? "selected" : ""; ?>>any</option>
+                <option value="all" <?php echo (isset($_GET["search_pattern_mode"]) && $_GET["search_pattern_mode"] == "all") ? "selected" : ""; ?>>all</option>
+                <option value="exact" <?php echo (isset($_GET["search_pattern_mode"]) && $_GET["search_pattern_mode"] == "exact") ? "selected" : ""; ?>>exact</option>
+              </select>
               <button class="btn btn-outline-success" type="submit">Search</button>
             </div>
           </form>
@@ -210,11 +225,17 @@
       </div>
     </nav>
 
+    <!-- show local serving directory -->
+    <div id="local-directory" class="container-fluid">
+      <p>Served from <i><? echo getcwd() . "/" . $rel_dir; ?></i></p>
+    </div>
+
     <!-- show search info -->
     <?
       if (isset($_GET["search"]) && !empty($_GET["search"])) {
         echo "<div id=\"search-description\" class=\"container-fluid\">";
         echo "<i>Searching for '<b>" . htmlspecialchars($_GET["search"]) . "</b>'";
+        $search_pattern_mode = isset($_GET["search_pattern_mode"]) ? htmlspecialchars($_GET["search_pattern_mode"]) : "";
         if ($search_pattern_mode != "") {
           echo " (mode '" . htmlspecialchars($search_pattern_mode) . "')";
         }
@@ -227,10 +248,15 @@
       <h4><a id="directories">Directories</a></h4>
       <?
         $dir_names = array();
-        foreach (glob("$rel_dir/*") as $dir_name) {
+        foreach (glob("./$rel_dir/*") as $dir_name) {
           if (is_dir($dir_name)) {
             $dir_name_split = explode("/", $dir_name);
-            array_push($dir_names, end($dir_name_split));
+            $dir_basename = end($dir_name_split);
+            // Skip bin and tests directories in base dir
+            if ($rel_dir == "" && ($dir_basename == "bin" || $dir_basename == "tests")) {
+              continue;
+            }
+            array_push($dir_names, $dir_basename);
           }
         }
         if (count($dir_names) == 0) {
@@ -330,13 +356,25 @@
       <h4><a id="files">Other files</a></h4>
       <?
         $file_names = array();
-        foreach (glob("$rel_dir/*") as $file_name) {
-          // skip directories, index files, files already shown above, and manually skipped ones
-          if (!is_file($file_name) || $file_name == "index.php" || !show_entry($file_name) || in_array($file_name, $covered_files)) {
+        foreach (glob("./$rel_dir/*") as $file_name) {
+          $file_name_cleaned = preg_replace('#/+#','/',$file_name);
+          $file_name_split_tmp = explode("/", $file_name_cleaned);
+          $file_name_split = end($file_name_split_tmp);
+          
+          // Get file extension
+          $ext = pathinfo($file_name_split, PATHINFO_EXTENSION);
+          
+          // Skip if extension is in either array
+          if (in_array($ext, $plot_extensions) || in_array($ext, $additional_extensions)) {
             continue;
           }
-          $file_name_split = explode("/", $file_name);
-          $file_names[] = end($file_name_split);
+          
+          // Skip directories, index files, and manually skipped ones
+          if (!is_file($file_name_cleaned) || $file_name_split == "index.php" || !show_entry($file_name_split)) {
+            continue;
+          }
+          
+          $file_names[] = $file_name_split;
         }
 
         if (count($file_names) == 0) {
