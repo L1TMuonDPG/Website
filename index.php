@@ -1,78 +1,45 @@
-<?
-  // authors: Marcel Rieger, Clemens Lange, based on the original work by P. Musella and improvements by G. Petrucciani
-  // see https://gitlab.cern.ch/cms-analysis/general/php-plots for more info
-
-  //
-  // settings
-  //
-
-  // extension of files to consider as plots
-  // (those that can be used as src attribute in img tags)
-  $plot_extensions = array(
+<?php
+// authors: Marcel Rieger, Clemens Lange, based on the original work by P. Musella and improvements by G. Petrucciani
+// see https://gitlab.cern.ch/cms-analysis/general/php-plots for more info
+//
+// settings
+//
+// Configuration
+$plot_extensions = array(
     "png", "pdf", "jpg", "jpeg", "gif", "PNG", "PDF", "JPG", "JPEG", "GIF",
-  );
+);
 
-  // additional extensions to link in card footer
-  $additional_extensions = array(
+$additional_extensions = array(
     "eps", "svg", "root", "cxx", "txt", "rtf", "log", "csv", "EPS", "SVG", "ROOT", "CXX", "TXT", "RTF", "LOG", "CSV",
-  );
+);
 
-
+$max_plot_depth = isset($_GET["depth"]) ? intval($_GET["depth"]) : 0;
   //
-  // helpers
-  //
+  // helpers  //
 
   // function that decides whether an entry given by its name is shown,
   // considering the name itself and optional search strings
-  function show_entry($name) {
-    // search mode in case multiple search strings are used
-    // any: any search pattern must match
-    // all: all search patterns must match
-    // exact: the search pattern must match as is
-    // default: any
-    if (!isset($_GET["search_pattern_mode"])) {
-      $search_pattern_mode = "any";
-    } else {
-      $search_pattern_mode = $_GET["search_pattern_mode"];
-    }
-
-    // always hide entries starting with "." or "_"
-    if (substr($name, 0, 1) == "." || substr($name, 0, 1) == "_") {
-      return False;
-    }
-
-    // show the entry when no search pattern is defined
-    if (!isset($_GET["search"]) || empty($_GET["search"])) {
-      return True;
-    }
-
-    // split into subpatterns by space
-    $patterns = explode(" ", preg_replace("/\s+/", " ", $_GET["search"]));
-
-    if ($search_pattern_mode == "all") {
-      // all patterns must match
-      foreach($patterns as $pattern) {
-        if (!fnmatch("*" . $pattern . "*", $name)) {
-          return False;
-        }
-      }
-      return True;
-
-    } else if ($search_pattern_mode == "any") {
-      // at least one pattern must match
-      foreach($patterns as $pattern) {
-        if (fnmatch("*" . $pattern . "*", $name)) {
-          return True;
-        }
-      }
-      return False;
-
-    } else {
-      // match with the search pattern as is
-      return fnmatch("*" . $_GET["search"] . "*", $name);
-    }
+function show_entry($name) {
+  if ($name[0] === "." || $name[0] === "_") {
+      return false;
   }
-?>
+    
+  $search = $_GET["search"] ?? "";
+  if (empty($search)) {
+      return true;
+  }
+    
+  $patterns = explode(" ", preg_replace("/\s+/", " ", $search));
+  $mode = $_GET["search_pattern_mode"] ?? "any";
+    
+  return match($mode) {
+      "all" => array_reduce($patterns, fn($carry, $pattern) => 
+          $carry && fnmatch("*$pattern*", $name), true),
+      "exact" => fnmatch("*$search*", $name),
+      default => array_reduce($patterns, fn($carry, $pattern) => 
+          $carry || fnmatch("*$pattern*", $name), false)
+  };
+}?>
 
 <!doctype html>
 <html lang="en">
@@ -185,10 +152,9 @@
                     echo "<li class=\"breadcrumb-item\"><a href=\"/\"><i class=\"bi bi-house-door-fill\"></i></a></li>";
 
                     // path fragments
-                    $rel_dir = trim(preg_replace("/(.*)\?.*/i", "$1", $_SERVER["REQUEST_URI"]), "/");
-                    // $rel_url_dir = trim(preg_replace("/(.*)\?.*/i", "$1", $_SERVER["REQUEST_URI"]), "/");
-                    // $rel_dir = getcwd() + "/" + $rel_url_dir;
-                    if ($rel_dir != "") {
+                    $rel_dir = trim(parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), "/");
+                    $base_path = getcwd();
+                    $current_path = $base_path . "/" . $rel_dir;                    if ($rel_dir != "") {
                       $fragments = explode("/", $rel_dir);
                       foreach($fragments as $i=>$fragment) {
                         $href = implode("/", array_fill(0, count($fragments) - 1 - $i, ".."));
@@ -201,6 +167,17 @@
             </li>
           </ul>
           <form class="d-flex">
+            <input type="hidden" name="depth" value="<?php echo $max_plot_depth; ?>">
+            <div class="input-group me-2">
+              <span class="input-group-text">Depth</span>
+              <a class="btn btn-outline-secondary" href="?depth=<?php echo max(0, ($max_plot_depth - 1)); ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?><?php echo isset($_GET['search_pattern_mode']) ? '&search_pattern_mode=' . urlencode($_GET['search_pattern_mode']) : ''; ?>">
+                <i class="bi bi-dash"></i>
+              </a>
+              <span class="input-group-text"><?php echo $max_plot_depth; ?></span>
+              <a class="btn btn-outline-secondary" href="?depth=<?php echo $max_plot_depth + 1; ?><?php echo isset($_GET['search']) ? '&search=' . urlencode($_GET['search']) : ''; ?><?php echo isset($_GET['search_pattern_mode']) ? '&search_pattern_mode=' . urlencode($_GET['search_pattern_mode']) : ''; ?>">
+                <i class="bi bi-plus"></i>
+              </a>
+            </div>
             <div class="input-group">
               <div style="position:relative">
                 <input class="form-control" type="search" name="search" placeholder="Pattern(s)" aria-label="Search" value="<?php if (isset($_GET["search"])) echo htmlspecialchars($_GET["search"]); ?>">
@@ -219,7 +196,6 @@
               <button class="btn btn-outline-success" type="submit">Search</button>
             </div>
           </form>
-
         </div>
 
       </div>
@@ -275,38 +251,50 @@
     <!-- list plots -->
     <div id="plot-listing" class="container-fluid">
       <h4><a id="plots">Plots</a></h4>
-      <div class="d-flex align-content-start flex-wrap">
-        <?
-          // scan through all extensions and collect files in two arrays
-          // nested: file_name -> extensions
-          // flag: all covered paths
-          $nested_files = array();
-          $covered_files = array();
-          $plot_names = array();
-          foreach ($plot_extensions as $ext) {
-            foreach (glob("$rel_dir/*.$ext") as $file_path) {
-              if (!is_file($file_path) || !show_entry($file_path)) {
+    <div class="d-flex align-content-start flex-wrap">
+      <?
+    function glob_recursive(string $pattern, int $depth, string $rel_dir): array {
+        if ($depth < 0) return [];
+        $base_path = getcwd();
+        $search_pattern = $rel_dir === '' ? "$base_path/*." . pathinfo($pattern, PATHINFO_EXTENSION) : $pattern;
+    
+        $files = glob($search_pattern);
+        if ($depth == 0) return $files;
+    
+        $dir_pattern = $rel_dir === '' ? "$base_path/*" : dirname($pattern) . '/*';
+    
+        return array_reduce(glob($dir_pattern, GLOB_ONLYDIR), function($acc, $dir) use ($pattern, $depth, $rel_dir, $base_path) {
+            $dir_name = basename($dir);
+            if ($dir_name[0] !== '.' && $dir_name[0] !== '_' && strpos(realpath($dir), $base_path) === 0) {
+                return array_merge($acc, glob_recursive(
+                    "$dir/*." . pathinfo($pattern, PATHINFO_EXTENSION),
+                    $depth - 1,
+                    $rel_dir
+                ));
+            }
+            return $acc;
+        }, $files);
+    }    $nested_files = array();
+    $covered_files = array();
+    $plot_names = array();
+    foreach ($plot_extensions as $ext) {
+        foreach (glob_recursive("$rel_dir/*.$ext", $max_plot_depth, $rel_dir) as $file_path) {
+            if (!is_file($file_path) || !show_entry($file_path)) {
                 continue;
-              }
-              $file_path_split = explode("/", $file_path);
-              $file_name = substr(end($file_path_split), 0, -1 * (strlen($ext) + 1));
-              if (!array_key_exists($file_name, $nested_files)) {
-                $nested_files[$file_name] = [];
-              }
-              $nested_files[$file_name][] = $ext;
-              $covered_files[] = $file_path;
             }
-          }
-          // extend files that have at least one plot exist with additional extensions
-          foreach(array_keys($nested_files) as $file_name) {
-            foreach ($additional_extensions as $ext) {
-              $file_path = "$rel_dir/$file_name.$ext";
-              if (file_exists("$file_path")) {
-                $nested_files[$file_name][] = $ext;
-                $covered_files[] = $file_path;
-              }
+            // Clean the path to remove ./ and ensure correct relative paths
+            $file_path_clean = preg_replace('#^\./|^' . $rel_dir . '/#', '', $file_path);
+            $file_name = pathinfo($file_path_clean, PATHINFO_FILENAME);
+            $file_dir = dirname($file_path_clean);
+            $display_path = $file_dir == '.' ? $file_name : "$file_dir/$file_name";
+            
+            if (!array_key_exists($display_path, $nested_files)) {
+                $nested_files[$display_path] = [];
             }
-          }
+            $nested_files[$display_path][] = $ext;
+            $covered_files[] = $file_path_clean;
+        }
+    }
           // show plots
           if (count($nested_files) == 0) {
             echo "<span class=\"empty-text\">No plots to display</span>";
