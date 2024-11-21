@@ -1,5 +1,5 @@
 <?
-  // author: Marcel Rieger
+  // authors: Marcel Rieger, Clemens Lange, based on the original work by P. Musella and improvements by G. Petrucciani
   // see https://gitlab.cern.ch/cms-analysis/general/php-plots for more info
 
   //
