@@ -3,7 +3,7 @@ stages:
 lint:
   stage: test
   image:
-    name: python:3.10
+    name: registry.cern.ch/docker.io/library/python:3.10
   script:
   - pip install -U pip setuptools
   - pip install -r requirements_dev.txt
@@ -11,7 +11,7 @@ lint:
 test:
   stage: test
   image:
-    name: python:3.10
+    name: registry.cern.ch/docker.io/library/python:3.10
   script:
   - apt-get -y update
   - apt-get -y install poppler-utils
