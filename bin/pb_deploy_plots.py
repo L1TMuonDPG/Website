@@ -77,10 +77,6 @@ def deploy_plots(
                 sources.appendleft((path, os.path.join(dst, elem)))
     print("done")
 
-    # copy index files
-    from pb_copy_index import copy_index
-    copy_index([destination], recursive=True)
-
     # convert pdf files
     if convert_pdf:
         from pb_pdf_to_png import convert_pdfs

@@ -30,26 +30,6 @@ Then access the page at <http://localhost:8080/>.
 
 A handful of scripts (prefixed with `pb` for plot browser) are provided to help you with the deployment of files.
 
-### `bin/pb_copy_index.py`
-
-The `index.php` file is meant to be copied into every subdirectory that should have plot browsing capabilities when visited.
-You can use the `pb_copy_index.py` script to (recursively) copy the file into specific directories.
-
-```shell
-> pb_copy_index.py --help
-
-usage: pb_copy_index.py [-h] [--recursive] directories [directories ...]
-
-Copies the index.php file of the plot browser to various directories.
-
-positional arguments:
-  directories      the directories to copy the index.php file to
-
-optional arguments:
-  -h, --help       show this help message and exit
-  --recursive, -r  copy the index.php file recursively into all subdirectories
-```
-
 ### `bin/pb_pdf_to_png.py`
 
 Many plotting pipelines produce only pdf files, however, it can often be helpful to also have accompanying png files stored next to them.
