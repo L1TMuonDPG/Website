@@ -352,7 +352,6 @@ $subdirectory = end($path_parts); // Get the last part of the path
 
     <!-- list other directories -->
     <div id="directory-listing" class="container-fluid">
-      <h4><a id="directories">Directories</a></h4>
       <?
         $dir_names = array();
         foreach (glob("./$rel_dir/*") as $dir_name) {
@@ -366,9 +365,8 @@ $subdirectory = end($path_parts); // Get the last part of the path
             array_push($dir_names, $dir_basename);
           }
         }
-        if (count($dir_names) == 0) {
-          echo "<span class=\"empty-text\">No directories to display</span>";
-        } else {
+        if (count($dir_names) > 0) {
+          echo "<h4><a id=\"directories\">Directories</a></h4>";
           echo "<ul>";
           sort($dir_names);
           foreach($dir_names as $dir_name) {
