@@ -148,7 +148,7 @@ $is_home_page = ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == 'i
       }
     </style>
 
-    <title>PlotBrowser</title>
+    <title>Muon DPG PlotBrowser</title>
   </head>
 
   <body>
