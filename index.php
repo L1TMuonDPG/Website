@@ -317,6 +317,12 @@ $subdirectory = end($path_parts); // Get the last part of the path
       For these plots, two working points are overlayed: one corresponding to an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the other corresponding to an L1T muon pT threshold of 11 GeV and an L1T quality cut of 14. <br>
       The new very high quality working point is chosen to have very high L1T muon purity and recovers muons in low pT region while staying within the available L1T rate budget.</p>
       </div>';
+    } elseif ($subdirectory == "eff_22_15") {
+      echo '<div id="2024" class="container-fluid">
+      <h4>Efficiency plots</h4>
+      <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, for the Global Muon Trigger (&mu;GMT).<br> 
+      For these plots, two working points are overlayed: one corresponding to an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the other corresponding to an L1T muon pT threshold of 15 GeV and an L1T quality cut of 8.</p>
+      </div>';
     }
 
     //   else {
