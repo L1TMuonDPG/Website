@@ -43,6 +43,10 @@ function show_entry($name) {
 // My settings 
 // Check if the current path is the root (home page)
 $is_home_page = ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == 'index.php');
+
+$current_path = trim($_SERVER['REQUEST_URI'], '/'); // Remove leading/trailing slashes
+$path_parts = explode('/', $current_path); // Split the path into parts
+$subdirectory = end($path_parts); // Get the last part of the path
 ?>
 
 <!doctype html>
@@ -230,8 +234,18 @@ $is_home_page = ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == 'i
             <li>Panagiotis Katris, PhD student, National and Kapodistrian University of Athens</li>
         </ul>
         <p style="text-align: left; margin-left: 0; font-size: 20px;"> Navigate to the following directories to see the plots </p>
-    </div>';
+        </div>';
       } 
+      if ($subdirectory == "2024") {
+        echo '<div id="2024" class="container-fluid">
+        <p style="text-align: left; margin-left: 0; font-size: 24px;">Plots for 2024 </p>
+        </div>';
+      } elseif ($subdirectory == "eff") {
+        echo '<div id="2024" class="container-fluid">
+        <p style="text-align: left; margin-left: 0; font-size: 24px;">Efficiency plots </p>
+        </div>';
+      }
+
     //   else {
     //       echo '<div id="subdirectory-title" class="container-fluid">
     //               <p style="text-align: left; margin-left: 0; font-size: 24px;">Subdirectory Content</p>
