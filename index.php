@@ -39,7 +39,11 @@ function show_entry($name) {
       default => array_reduce($patterns, fn($carry, $pattern) => 
           $carry || fnmatch("*$pattern*", $name), false)
   };
-}?>
+}
+// My settings 
+// Check if the current path is the root (home page)
+$is_home_page = ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == 'index.php');
+?>
 
 <!doctype html>
 <html lang="en">
