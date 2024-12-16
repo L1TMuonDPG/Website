@@ -226,12 +226,17 @@ $subdirectory = end($path_parts); // Get the last part of the path
       // Display different content based on whether we are on the homepage
       if ($is_home_page) {
         echo '<div id="home-title" class="container-fluid">
-        <p style="text-align: left; margin-left: 0; font-size: 24px;">L1T Muon DPG Plots Repository</p>
+        <h2>L1T Muon DPG Plots Repository</h2>
         <p style="text-align: left; margin-left: 0; font-size: 20px;">Team Members:</p>
         <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
             <li>Ioannis Paraskevas, Muon DPG convener, National and Kapodistrian University of Athens</li>
             <li>Nikolaos Plastiras, PhD student, National and Kapodistrian University of Athens</li>
             <li>Panagiotis Katris, PhD student, National and Kapodistrian University of Athens</li>
+        </ul>
+        <h4>Publications</h4>
+        <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
+          <li><a href="https://cds.cern.ch/record/2917885" target="_blank">Level-1 Trigger Performance in 2024 Proton-Proton Collisions at &radic;s 13.6 TeV </a></li>
+          <li><a href="https://cds.cern.ch/record/2868794?ln=en" target="_blank">Level-1 Muon Trigger Performance with part of 2023 dataset</a></li>
         </ul>
         <p style="text-align: left; margin-left: 0; font-size: 20px;"> Navigate to the following directories to see the plots </p>
         </div>';
@@ -240,6 +245,8 @@ $subdirectory = end($path_parts); // Get the last part of the path
         echo '<div id="2024" class="container-fluid">
         <p style="text-align: left; margin-left: 0; font-size: 24px;">Plots for 2024 </p>
         </div>';
+      } elseif ($subdirectory == "2023"){
+
       } elseif ($subdirectory == "eff") {
         echo '<div id="2024" class="container-fluid">
         <p style="text-align: left; margin-left: 0; font-size: 24px;">Efficiency plots </p>
