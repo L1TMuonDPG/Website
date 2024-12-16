@@ -305,6 +305,11 @@ $subdirectory = end($path_parts); // Get the last part of the path
         <h4>Efficiency plots versus run number </h4>
         <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the average L1T muon efficiency as a function of the run number.</p>
         </div>';
+      } elseif ($subdirectory == "misid_run") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Charge misidentification probability plots versus run number </h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the average L1T charge misidentification probability as a function of the run number.</p>
+        </div>';
       }
 
     //   else {
