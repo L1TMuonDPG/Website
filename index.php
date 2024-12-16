@@ -300,6 +300,11 @@ $subdirectory = end($path_parts); // Get the last part of the path
         <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, for the Barrel Muon Track Finder (BMTF), for four different L1T quality cuts.<br> 
         The new high quality working points are chosen to have very high L1T muon purity and recover muons in low pT region while staying within the available L1T rate budget.</p>
         </div>';
+      } elseif ($subdirectory == "eff_run") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Efficiency plots versus run number </h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the average L1T muon efficiency as a function of the run number.</p>
+        </div>';
       }
 
     //   else {
