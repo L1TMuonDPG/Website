@@ -294,6 +294,12 @@ $subdirectory = end($path_parts); // Get the last part of the path
         <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon charge misidentification probability as a function of offline-reconstructed muon pT, separately for each track finder and combined, and as a function of &eta;-&phi;.<br> 
         For these plots, an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12 are used. L1T muons are matched to offline muons if &Delta;R(L1, offline) < 0.1.</p>
         </div>';
+      } elseif ($subdirectory == "eff_qual") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Efficiency plots for different L1T quality cuts</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, for the Barrel Muon Track Finder (BMTF), for four different L1T quality cuts.<br> 
+        The new high quality working points are chosen to have very high L1T muon purity and recover muons in low pT region while staying within the available L1T rate budget.</p>
+        </div>';
       }
 
     //   else {
