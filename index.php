@@ -379,94 +379,97 @@ $subdirectory = end($path_parts); // Get the last part of the path
 
     <!-- list plots -->
     <div id="plot-listing" class="container-fluid">
-      <h4><a id="plots">Plots</a></h4>
-    <div id="sortable" class="d-flex align-content-start flex-wrap">
       <?
-    function glob_recursive(string $pattern, int $depth, string $rel_dir): array {
-        if ($depth < 0) return [];
-        $base_path = getcwd();
-        $search_pattern = $rel_dir === '' ? "$base_path/*." . pathinfo($pattern, PATHINFO_EXTENSION) : $pattern;
-    
-        $files = glob($search_pattern);
-        if ($depth == 0) return $files;
-    
-        $dir_pattern = $rel_dir === '' ? "$base_path/*" : dirname($pattern) . '/*';
-    
-        return array_reduce(glob($dir_pattern, GLOB_ONLYDIR), function($acc, $dir) use ($pattern, $depth, $rel_dir, $base_path) {
-            $dir_name = basename($dir);
-            if ($dir_name[0] !== '.' && $dir_name[0] !== '_' && strpos(realpath($dir), $base_path) === 0) {
-                return array_merge($acc, glob_recursive(
-                    "$dir/*." . pathinfo($pattern, PATHINFO_EXTENSION),
-                    $depth - 1,
-                    $rel_dir
-                ));
-            }
-            return $acc;
-        }, $files);
-    }    $nested_files = array();
-    $covered_files = array();
-    $plot_names = array();
-    foreach ($plot_extensions as $ext) {
-        foreach (glob_recursive("$rel_dir/*.$ext", $max_plot_depth, $rel_dir) as $file_path) {
-            if (!is_file($file_path) || !show_entry($file_path)) {
-                continue;
-            }
-            // Clean the path to remove ./ and ensure correct relative paths
-            $file_path_clean = preg_replace('#^\./|^' . $rel_dir . '/#', '', $file_path);
-            $file_name = pathinfo($file_path_clean, PATHINFO_FILENAME);
-            $file_dir = dirname($file_path_clean);
-            $display_path = $file_dir == '.' ? $file_name : "$file_dir/$file_name";
-            
-            if (!array_key_exists($display_path, $nested_files)) {
-                $nested_files[$display_path] = [];
-            }
-            $nested_files[$display_path][] = $ext;
-            $covered_files[] = $file_path_clean;
-        }
-    }
-          // show plots
-          if (count($nested_files) == 0) {
-            echo "<span class=\"empty-text\">No plots to display</span>";
-          } else {
-            // sort by name
-            $file_names = array_keys($nested_files);
-            sort($file_names);
-            foreach ($file_names as $file_name) {
-              foreach ($nested_files[$file_name] as $i => $ext) {
-                $file_path = "$file_name.$ext";
+        function glob_recursive(string $pattern, int $depth, string $rel_dir): array {
+            if ($depth < 0) return [];
+            $base_path = getcwd();
+            $search_pattern = $rel_dir === '' ? "$base_path/*." . pathinfo($pattern, PATHINFO_EXTENSION) : $pattern;
 
-                // beginning of the card container, knowing that the first file is always a plot
-                if ($i == 0) {
-                  echo "<div class=\"card text-center sortable-card\">";
-                  echo "  <div class=\"card-header\">";
-                  echo "    <a href=\"$file_path\">$file_name</a>";
-                  echo "  </div>";
-                  echo "  <a href=\"$file_path\">";
-                  echo "    <img class=\"card-img-top\" src=\"$file_path\">";
-                  echo "  </a>";
-                  echo "  <div class=\"card-footer\">";
-                  echo "    <p class=\"card-text\">";
+            $files = glob($search_pattern);
+            if ($depth == 0) return $files;
+
+            $dir_pattern = $rel_dir === '' ? "$base_path/*" : dirname($pattern) . '/*';
+
+            return array_reduce(glob($dir_pattern, GLOB_ONLYDIR), function($acc, $dir) use ($pattern, $depth, $rel_dir, $base_path) {
+                $dir_name = basename($dir);
+                if ($dir_name[0] !== '.' && $dir_name[0] !== '_' && strpos(realpath($dir), $base_path) === 0) {
+                    return array_merge($acc, glob_recursive(
+                        "$dir/*." . pathinfo($pattern, PATHINFO_EXTENSION),
+                        $depth - 1,
+                        $rel_dir
+                    ));
                 }
-                // list all available extensions in footer
-                $badge_style = "secondary";
-                if ($ext == "png") {
-                  $badge_style = "primary";
-                } else if ($ext == "pdf") {
-                  $badge_style = "info";
-                } else if ($ext == "root") {
-                  $badge_style = "dark";
+                return $acc;
+            }, $files);
+        }
+
+        $nested_files = array();
+        $covered_files = array();
+        $plot_names = array();
+
+        foreach ($plot_extensions as $ext) {
+            foreach (glob_recursive("$rel_dir/*.$ext", $max_plot_depth, $rel_dir) as $file_path) {
+                if (!is_file($file_path) || !show_entry($file_path)) {
+                    continue;
                 }
-                echo "      <a href=\"$file_path\" class=\"badge rounded-pill bg-$badge_style\">$ext</a>";
-              }
-              // finish the card container
-              echo "    </p>";
-              echo "  </div>";
-              echo "</div>";
+                // Clean the path to remove ./ and ensure correct relative paths
+                $file_path_clean = preg_replace('#^\./|^' . $rel_dir . '/#', '', $file_path);
+                $file_name = pathinfo($file_path_clean, PATHINFO_FILENAME);
+                $file_dir = dirname($file_path_clean);
+                $display_path = $file_dir == '.' ? $file_name : "$file_dir/$file_name";
+                
+                if (!array_key_exists($display_path, $nested_files)) {
+                    $nested_files[$display_path] = [];
+                }
+                $nested_files[$display_path][] = $ext;
+                $covered_files[] = $file_path_clean;
             }
+        }
+
+        // Only render the section if plots are found
+        if (count($nested_files) > 0) {
+          echo "<h4><a id=\"plots\">Plots</a></h4>";
+          echo "<div id=\"sortable\" class=\"d-flex align-content-start flex-wrap\">";
+          // sort by name
+          $file_names = array_keys($nested_files);
+          sort($file_names);
+          foreach ($file_names as $file_name) {
+            foreach ($nested_files[$file_name] as $i => $ext) {
+              $file_path = "$file_name.$ext";
+
+              // beginning of the card container, knowing that the first file is always a plot
+              if ($i == 0) {
+                echo "<div class=\"card text-center sortable-card\">";
+                echo "  <div class=\"card-header\">";
+                echo "    <a href=\"$file_path\">$file_name</a>";
+                echo "  </div>";
+                echo "  <a href=\"$file_path\">";
+                echo "    <img class=\"card-img-top\" src=\"$file_path\">";
+                echo "  </a>";
+                echo "  <div class=\"card-footer\">";
+                echo "    <p class=\"card-text\">";
+              }
+              // list all available extensions in footer
+              $badge_style = "secondary";
+              if ($ext == "png") {
+                $badge_style = "primary";
+              } else if ($ext == "pdf") {
+                $badge_style = "info";
+              } else if ($ext == "root") {
+                $badge_style = "dark";
+              }
+              echo "      <a href=\"$file_path\" class=\"badge rounded-pill bg-$badge_style\">$ext</a>";
+            }
+            // finish the card container
+            echo "    </p>";
+            echo "  </div>";
+            echo "</div>";
           }
-        ?>
-      </div>
+          echo "</div>";
+        }
+      ?>
     </div>
+
 
     <!-- list additional files -->
     <div id="file-listing" class="container-fluid">
