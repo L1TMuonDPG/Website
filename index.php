@@ -150,6 +150,41 @@ $subdirectory = end($path_parts); // Get the last part of the path
         border: 2px dashed #007bff;
         margin: 5px;
       }
+
+      .modal {
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        width: 50%;
+        text-align: center;
+      }
+
+      .close {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        font-size: 24px;
+        cursor: pointer;
+      }
+      
+      #contact-modal .modal-content p {
+        margin-bottom: 4px;
+      }
+
     </style>
 
     <title>Muon DPG PlotBrowser</title>
@@ -441,11 +476,25 @@ $subdirectory = end($path_parts); // Get the last part of the path
     <div class="container-fluid">
       <button type="button" class="btn btn-outline-primary btn-sm" id="scroll-top">To top</button>
     </div>
+    
+    <!-- Contact button -->
+    <div id="contact-modal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Contact Us</h2>
+          <p> Ioannis Paraskevas - <a href="mailto:ioannis.paraskevas@cern.ch">ioannis.paraskevas@cern.ch</a></p>
+          <p> Nikolaos Plastiras - <a href="mailto:nikolaos.plastiras@cern.ch">nikolaos.plastiras@cern.ch</a></p>
+          <p>Panagiotis Katris - <a href="mailto:panagiotis.katris@cern.ch">panagiotis.katris@cern.ch</a></p>
+      </div>
+    </div>
+
 
     <!-- footer -->
     <div id="footer">
-      <a href="https://gitlab.cern.ch/cms-analysis/general/php-plots"><i class="bi bi-code-slash"></i> Plot browser</a>
+      <a href="#" id="contact-button"><i class="bi bi-envelope"></i> Contact Us</a>
         |  
+      <a href="https://gitlab.cern.ch/cms-analysis/general/php-plots"><i class="bi bi-code-slash"></i> Plot browser</a>
+      <!--   |  
       <?php
         $version = "unknown version";
         $git_dir = dirname(__FILE__) . "/.git";
@@ -463,7 +512,7 @@ $subdirectory = end($path_parts); // Get the last part of the path
           }
         }
         echo $version;
-      ?>
+      ?> -->
         |  
       <a href="https://cms-analysis.docs.cern.ch/guidelines/other/plot_browser"><i class="bi bi-info-circle"></i> Documentation</a>
     </div>
@@ -490,5 +539,22 @@ $subdirectory = end($path_parts); // Get the last part of the path
           $("#sortable").disableSelection();
       });
     </script>
+
+    <script>
+      document.getElementById('contact-button').addEventListener('click', function() {
+        document.getElementById('contact-modal').style.display = 'flex';
+      });
+
+      document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('contact-modal').style.display = 'none';
+      });
+
+      window.addEventListener('click', function(event) {
+        if (event.target == document.getElementById('contact-modal')) {
+          document.getElementById('contact-modal').style.display = 'none';
+        }
+      });
+    </script>
+
   </body>
 </html>
