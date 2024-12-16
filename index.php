@@ -217,11 +217,32 @@ $is_home_page = ($_SERVER['REQUEST_URI'] == '/' || $_SERVER['REQUEST_URI'] == 'i
 
       </div>
     </nav>
+      
+    <?php
+      // Display different content based on whether we are on the homepage
+      if ($is_home_page) {
+        echo '<div id="home-title" class="container-fluid">
+        <p style="text-align: left; margin-left: 0; font-size: 24px;">L1T Muon DPG Plots Repository</p>
+        <p style="text-align: left; margin-left: 0; font-size: 20px;">Team Members:</p>
+        <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
+            <li>Ioannis Paraskevas, Muon DPG convener, National and Kapodistrian University of Athens</li>
+            <li>Nikolaos Plastiras, PhD student, National and Kapodistrian University of Athens</li>
+            <li>Panagiotis Katris, PhD student, National and Kapodistrian University of Athens</li>
+        </ul>
+        <p style="text-align: left; margin-left: 0; font-size: 20px;"> Navigate to the following directories to see the plots </p>
+    </div>';
+      } 
+    //   else {
+    //       echo '<div id="subdirectory-title" class="container-fluid">
+    //               <p style="text-align: left; margin-left: 0; font-size: 24px;">Subdirectory Content</p>
+    //             </div>';
+    //  }
+    ?>
 
     <!-- show local serving directory -->
-    <div id="local-directory" class="container-fluid">
+    <!-- <div id="local-directory" class="container-fluid">
       <p>Served from <i><? echo getcwd() . "/" . $rel_dir; ?></i></p>
-    </div>
+    </div> -->
 
     <!-- show search info -->
     <?
