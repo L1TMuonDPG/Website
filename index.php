@@ -284,9 +284,11 @@ $subdirectory = end($path_parts); // Get the last part of the path
 
       } elseif ($subdirectory == "eff") {
         echo '<div id="2024" class="container-fluid">
-        <p style="text-align: left; margin-left: 0; font-size: 24px;">Efficiency plots </p>
+        <h4>Efficiency plots</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, separately for each track finder and combined.<br> 
+        The plots are divided into two working points: one for an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the second for an L1T muon pT threshold of 5 GeV with an L1T quality cut of 8 GeV.</p>
         </div>';
-      }
+      } 
 
     //   else {
     //       echo '<div id="subdirectory-title" class="container-fluid">
