@@ -186,26 +186,23 @@ $subdirectory = end($path_parts); // Get the last part of the path
       }
 
     </style>
-    <!-- <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+    <!-- Calendar sources -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ical.js/2.0.0/ical.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.8/index.global.min.js"></script> -->
-
-  
-    
 
     <!-- Calendar implementation -->
-    <!-- <script>
+    <script>
       document.addEventListener('DOMContentLoaded', function() {
           var calendarEl = document.getElementById('calendar');
 
           var calendar = new FullCalendar.Calendar(calendarEl, {
               initialView: 'dayGridMonth',
               selectable: true,
+              nowindicator: true,
               dateClick: function(info) {
                   // When a date is clicked, switch to the day view
                   calendar.changeView('timeGridDay', info.date);
@@ -215,36 +212,22 @@ $subdirectory = end($path_parts); // Get the last part of the path
                   center: 'title',         // Calendar title
                   right: 'dayGridMonth,timeGridWeek,timeGridDay' // View options
               },
+              events: [
+                {
+                  title: 'L1 muon DPG meeting',
+                  start: '2025-01-17T13:30:00Z', // UTC time: 14:30 CET is 13:30 UTC
+                  end: '2025-01-17T15:00:00Z',
+                  description: 'First L1 muon DPG meeting of the year.'
+                }
+              ],
               firstDay: 1 // Set Monday as the first day of the week
-              // Google Calendar integration
-              googleCalendarApiKey: 'AIzaSyCTjElk5ilnU-wZnTIdwLRj7Cn5Ylz_pJU', // Replace with your API key
-              events: {
-                googleCalendarId: '5bf3133311b6303e9b7e76dfd6012231aae159907d76994b077e2e6da411f957@group.calendar.google.com'
-              }
           });
 
           calendar.render();
       });
-    </script> -->
-
-    <!-- Matomo -->
-    <script>
-      var _paq = window._paq = window._paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="https://webanalytics.web.cern.ch/";
-        _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '793']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-      })();
     </script>
-    <!-- End Matomo Code -->
 
-
-    <title>NP's PlotBrowser</title>
+    <title>Muon DPG PlotBrowser</title>
   </head>
 
   <body>
@@ -318,65 +301,141 @@ $subdirectory = end($path_parts); // Get the last part of the path
       // Display different content based on whether we are on the homepage
       if ($is_home_page) {
         echo '<div id="home-title" class="container-fluid">
-        <h2>Welcome to my homepage</h2>
+        <h2>L1T Muon DPG Plots Repository</h2>
+        <p style="text-align: left; margin-left: 0; font-size: 20px;">Team Members:</p>
+        <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
+            <li>Ioannis Paraskevas, Muon DPG convener, National and Kapodistrian University of Athens</li>
+            <li>Nikolaos Plastiras, PhD student, National and Kapodistrian University of Athens</li>
+            <li>Panagiotis Katris, PhD student, National and Kapodistrian University of Athens</li>
+        </ul>
+        <h4>Publications</h4>
+        <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
+          <li><a href="https://cds.cern.ch/record/2917885" target="_blank">Level-1 Trigger Performance in 2024 Proton-Proton Collisions at &radic;s 13.6 TeV </a></li>
+          <li><a href="https://cds.cern.ch/record/2868794?ln=en" target="_blank">Level-1 Muon Trigger Performance with part of 2023 dataset</a></li>
+          <li><a href="https://cds.cern.ch/record/2868797" target=_blank">Displaced BMTF Efficiency Using 2023 Data</a></li>
+        </ul>
         <p style="text-align: left; margin-left: 0; font-size: 20px;"> Navigate to the following directories to see the plots </p>
         </div>';
-        // <p style="text-align: left; margin-left: 0; font-size: 20px;">Team Members:</p>'
-        // <h4>Publications</h4>
-        // <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
-        //   <li><a href="https://cds.cern.ch/record/2917885" target="_blank">Level-1 Trigger Performance in 2024 Proton-Proton Collisions at &radic;s 13.6 TeV </a></li>
-        //   <li><a href="https://cds.cern.ch/record/2868794?ln=en" target="_blank">Level-1 Muon Trigger Performance with part of 2023 dataset</a></li>
-        //   <li><a href="https://cds.cern.ch/record/2868797" target=_blank">Displaced BMTF Efficiency Using 2023 Data</a></li>
-        // </ul>
       } 
-    //   if ($subdirectory == "2024") {
-    //     echo '<div id="2024" class="container-fluid">
-    //     <p style="text-align: left; margin-left: 0; font-size: 24px;">Plots for 2024 </p>
-    //     </div>';
-    //   } elseif ($subdirectory == "2023"){
-
-    //   } elseif ($subdirectory == "eff") {
-    //     echo '<div id="2024" class="container-fluid">
-    //     <h4>Efficiency plots</h4>
-    //     <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, separately for each track finder and combined.<br> 
-    //     The plots are divided into two working points: one for an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the second for an L1T muon pT threshold of 5 GeV with an L1T quality cut of 8 GeV.</p>
-    //     </div>';
-    //   } elseif ($subdirectory == "misid"){
-    //     echo '<div id="2024" class="container-fluid">
-    //     <h4>Charge misidentification probability plots</h4>
-    //     <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon charge misidentification probability as a function of offline-reconstructed muon pT, separately for each track finder and combined, and as a function of &eta;-&phi;.<br> 
-    //     For these plots, an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12 are used. L1T muons are matched to offline muons if &Delta;R(L1, offline) < 0.1.</p>
-    //     </div>';
-    //   } elseif ($subdirectory == "eff_qual") {
-    //     echo '<div id="2024" class="container-fluid">
-    //     <h4>Efficiency plots for different L1T quality cuts</h4>
-    //     <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, for the Barrel Muon Track Finder (BMTF) region, for four different L1T quality cuts.<br> 
-    //     The new high quality working points are chosen to have very high L1T muon purity and recover muons in low pT region while staying within the available L1T rate budget.</p>
-    //     </div>';
-    //   } elseif ($subdirectory == "eff_run") {
-    //     echo '<div id="2024" class="container-fluid">
-    //     <h4>Efficiency plots versus run number </h4>
-    //     <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the average L1T muon efficiency as a function of the run number.</p>
-    //     </div>';
-    //   } elseif ($subdirectory == "misid_run") {
-    //     echo '<div id="2024" class="container-fluid">
-    //     <h4>Charge misidentification probability plots versus run number </h4>
-    //     <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the average L1T charge misidentification probability as a function of the run number.</p>
-    //     </div>';
-    //   }  elseif ($subdirectory == "eff_22_11") {
-    //   echo '<div id="2024" class="container-fluid">
-    //   <h4>Efficiency plots</h4>
-    //   <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta; or &phi;, for the Barrel Muon Track Finder (BMTF) region.<br> 
-    //   For these plots, two working points are overlayed: one corresponding to an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the other corresponding to an L1T muon pT threshold of 11 GeV and an L1T quality cut of 14. <br>
-    //   The new very high quality working point is chosen to have very high L1T muon purity and recovers muons in low pT region while staying within the available L1T rate budget.</p>
-    //   </div>';
-    // } elseif ($subdirectory == "eff_22_15") {
-    //   echo '<div id="2024" class="container-fluid">
-    //   <h4>Efficiency plots</h4>
-    //   <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta; or &phi;, for the Global Muon Trigger (&mu;GMT).<br> 
-    //   For these plots, two working points are overlayed: one corresponding to an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the other corresponding to an L1T muon pT threshold of 15 GeV and an L1T quality cut of 8.</p>
-    //   </div>';
-    // }
+      if ($subdirectory == "2024") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">For Level-1 Trigger, 2024 was the smoothest year of Run-3 pp data-taking so far.<br>
+        A total of 123/113/109 <span>fb<sup>-1</sup></span> of pp luminosity was delivered/recorded/certified.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';
+      } elseif ($subdirectory == "2024B"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024B</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 0.13 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';        
+      } elseif ($subdirectory == "2024C"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024C</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 7.24 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';
+      } elseif ($subdirectory == "2024D"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024D</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 7.96 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';
+      } elseif ($subdirectory == "2024E"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024E</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 11.32 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';
+      } elseif ($subdirectory == "2024F"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024F</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 27.76 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';
+      } elseif ($subdirectory == "2024G"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024G</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 37.77 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';
+      } elseif ($subdirectory == "2024H"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024H</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 5.44 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';
+      } elseif ($subdirectory == "2024I"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2024I</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 11.49 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.<br>
+        Navigate to the following directories to see the plots.</p>
+        </div>';
+        # 2023 era
+      } elseif ($subdirectory == "2023"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2023</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">A total of 29 <span>fb<sup>-1</sup></span> of pp luminosity was delivered of which 28.41 <span>fb<sup>-1</sup></span> was certified.<br> Navigate to the following directories to see the plots.</p>
+        </div>';
+      }elseif ($subdirectory == "2023B"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2023B</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Navigate to the following directories to see the plots.</p>
+        </div>';
+      }elseif ($subdirectory == "2023C"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2023C</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Navigate to the following directories to see the plots.</p>
+        </div>';
+      }elseif ($subdirectory == "2023D"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Plots for 2023D</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Navigate to the following directories to see the plots.</p>
+        </div>';
+      #sub-sub-folders
+      } elseif ($subdirectory == "eff") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Efficiency plots</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, separately for each track finder and combined.<br> 
+        The plots are divided into two working points: one for an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the second for an L1T muon pT threshold of 5 GeV with an L1T quality cut of 8 GeV.</p>
+        </div>';
+      } elseif ($subdirectory == "misid"){
+        echo '<div id="2024" class="container-fluid">
+        <h4>Charge misidentification probability plots</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon charge misidentification probability as a function of offline-reconstructed muon pT, separately for each track finder and combined, and as a function of &eta;-&phi;.<br> 
+        For these plots, an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12 are used. L1T muons are matched to offline muons if &Delta;R(L1, offline) < 0.1.</p>
+        </div>';
+      } elseif ($subdirectory == "eff_qual") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Efficiency plots for different L1T quality cuts</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, for the Barrel Muon Track Finder (BMTF) region, for four different L1T quality cuts.<br> 
+        The new high quality working points are chosen to have very high L1T muon purity and recover muons in low pT region while staying within the available L1T rate budget.</p>
+        </div>';
+      } elseif ($subdirectory == "eff_run" || $subdirectory == "eff_vs_run") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Efficiency plots versus run number </h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the average L1T muon efficiency as a function of the run number.</p>
+        </div>';
+      } elseif ($subdirectory == "misid_run" || $subdirectory == "misid_vs_run") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Charge misidentification probability plots versus run number </h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the average L1T charge misidentification probability as a function of the run number.</p>
+        </div>';
+      } elseif ($subdirectory == "eff_22_11") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Efficiency plots</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta; or &phi;, for the Barrel Muon Track Finder (BMTF) region.<br> 
+        For these plots, two working points are overlayed: one corresponding to an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the other corresponding to an L1T muon pT threshold of 11 GeV and an L1T quality cut of 14. <br>
+        The new very high quality working point is chosen to have very high L1T muon purity and recovers muons in low pT region while staying within the available L1T rate budget.</p>
+        </div>';
+      } elseif ($subdirectory == "eff_22_15") {
+        echo '<div id="2024" class="container-fluid">
+        <h4>Efficiency plots</h4>
+        <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta; or &phi;, for the Global Muon Trigger (&mu;GMT).<br> 
+        For these plots, two working points are overlayed: one corresponding to an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the other corresponding to an L1T muon pT threshold of 15 GeV and an L1T quality cut of 8.</p>
+        </div>';
+      }
 
     //   else {
     //       echo '<div id="subdirectory-title" class="container-fluid">
@@ -561,16 +620,25 @@ $subdirectory = end($path_parts); // Get the last part of the path
       ?>
     </div>
     
-    <!-- Calendar
-    <div id="calendar-container" style="max-width: 600px; margin: 0 auto; margin-left: 20px;">
+    <!-- Useful links -->
+    <?php
+      // Display different content based on whether we are on the homepage
+      if ($is_home_page) {
+        echo '<div id="home-title" class="container-fluid">
+        <h4>External Resources</h4>
+        <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
+          <li><a href="https://twiki.cern.ch/twiki/bin/view/CMS/L1TriggerDPG" target="_blank">Level-1 Trigger DPG TWiki homepage</a></li>
+          <li><a href="https://twiki.cern.ch/twiki/bin/view/CMSPublic/L1TriggerDPGResults" target="_blank">Level-1 Trigger Public Performance Results </a></li>
+          <li><a href="https://indico.cern.ch/category/2091/" target=_blank">Indico category</a> - <a href="https://indico.cern.ch/category/2091/overview?period=day" target=_blank"> Today\'s events</a></li>
+        </ul>
+        </div>';
+      }
+    ?>
+
+    <!-- Calendar -->
+    <!-- <div id="calendar-container" style="max-width: 600px; margin: 0 auto; margin-left: 20px;">
       <div id="calendar"></div>
     </div> -->
-      
-    <? 
-    if ($is_home_page) {
-    echo '<iframe src="https://calendar.google.com/calendar/embed?src=5bf3133311b6303e9b7e76dfd6012231aae159907d76994b077e2e6da411f957%40group.calendar.google.com&ctz=Europe%2FAthens" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>';
-    }
-    ?>
 
     <!-- scroll-to-top button -->
     <div class="container-fluid">
@@ -581,16 +649,17 @@ $subdirectory = end($path_parts); // Get the last part of the path
     <div id="contact-modal" class="modal" style="display:none;">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <h2>Contact Me</h2>
-          <p> Nikolaos Plastiras - <a href="mailto:nikolaos.plastiras@cern.ch">nikolaos.plastiras@cern.ch</a><br>
-        or<br> find me at Mattermost - @nplastir</p>
+        <h2>Contact Us</h2>
+          <p> Ioannis Paraskevas - <a href="mailto:ioannis.paraskevas@cern.ch">ioannis.paraskevas@cern.ch</a></p>
+          <p> Nikolaos Plastiras - <a href="mailto:nikolaos.plastiras@cern.ch">nikolaos.plastiras@cern.ch</a></p>
+          <p>Panagiotis Katris - <a href="mailto:panagiotis.katris@cern.ch">panagiotis.katris@cern.ch</a></p>
       </div>
     </div>
-      
+
 
     <!-- footer -->
     <div id="footer">
-      <a href="#" id="contact-button"><i class="bi bi-envelope"></i> Contact Me</a>
+      <a href="#" id="contact-button"><i class="bi bi-envelope"></i> Contact Us</a>
         |  
       <a href="https://gitlab.cern.ch/cms-analysis/general/php-plots"><i class="bi bi-code-slash"></i> Plot browser</a>
       <!--   |  
@@ -618,7 +687,6 @@ $subdirectory = end($path_parts); // Get the last part of the path
     <!-- include third-party scripts via cdns -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-
 
 
     <!-- inline scripts -->
@@ -655,8 +723,6 @@ $subdirectory = end($path_parts); // Get the last part of the path
         }
       });
     </script>
-
-    
 
   </body>
 </html>
