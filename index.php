@@ -301,11 +301,10 @@ $subdirectory = end($path_parts); // Get the last part of the path
       // Display different content based on whether we are on the homepage
       if ($is_home_page) {
         echo '<div id="home-title" class="container-fluid">
-        <h2>L1T Muon DPG Plots Repository</h2>
+        <h2>L1T Muon DPG Run 3 Plots Repository</h2>
         <p style="text-align: left; margin-left: 0; font-size: 20px;">Team Members:</p>
         <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
-            <li>Ioannis Paraskevas, Muon DPG convener, National and Kapodistrian University of Athens</li>
-            <li>Nikolaos Plastiras, PhD student, National and Kapodistrian University of Athens</li>
+            <li>Nikolaos Plastiras, Muon DPG Run 3 convener, National and Kapodistrian University of Athens</li>
             <li>Panagiotis Katris, PhD student, National and Kapodistrian University of Athens</li>
         </ul>
         <h4>Publications</h4>
@@ -313,6 +312,11 @@ $subdirectory = end($path_parts); // Get the last part of the path
           <li><a href="https://cds.cern.ch/record/2917885" target="_blank">Level-1 Trigger Performance in 2024 Proton-Proton Collisions at &radic;s 13.6 TeV </a></li>
           <li><a href="https://cds.cern.ch/record/2868794?ln=en" target="_blank">Level-1 Muon Trigger Performance with part of 2023 dataset</a></li>
           <li><a href="https://cds.cern.ch/record/2868797" target=_blank">Displaced BMTF Efficiency Using 2023 Data</a></li>
+        </ul>
+        <h4>Workshops</h4>
+        <ul style="text-align: left; margin-left: 5px; font-size: 18px; list-style-type: disc;">
+          <li><a href="https://indico.cern.ch/event/1497887/contributions/6402480/attachments/3043685/5377433/Trigger_Workshop_Muons.pdf" target="_blank">Level-1 Trigger Workshop @ Oviedo, 2025, talk given by Nikolaos </a></li>
+          <li><a href="https://indico.cern.ch/event/1288569/contributions/5490551/attachments/2711183/4709072/Muons%20L1T%20workshop%20athens.pdf" target="_blank">Level-1 Trigger Workshop @ Athens, 2023, talk given by Ioannis </a></li>
         </ul>
         <p style="text-align: left; margin-left: 0; font-size: 20px;"> Navigate to the following directories to see the plots </p>
         </div>';
@@ -410,7 +414,8 @@ $subdirectory = end($path_parts); // Get the last part of the path
         echo '<div id="2024" class="container-fluid">
         <h4>Efficiency plots for different L1T quality cuts</h4>
         <p style="text-align: left; margin-left: 0; font-size: 18px;">Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi;, for the Barrel Muon Track Finder (BMTF) region, for four different L1T quality cuts.<br> 
-        The new high quality working points are chosen to have very high L1T muon purity and recover muons in low pT region while staying within the available L1T rate budget.</p>
+        The new high quality working points are chosen to have very high L1T muon purity and recover muons in low pT region while staying within the available L1T rate budget. <br> 
+        Muons with quality ≥ 4 are labeled "open quality" and are used in special triggers, quality ≥ 8 are labeled "double quality" and are used in standard multi-muon triggers, quality ≥ 12 are labeled "single quality" and are used in single-muon triggers, and quality values ≥ 14 represent the new "very high quality" muons which are used in barrel-only low-pT muon triggers.</p>
         </div>';
       } elseif ($subdirectory == "eff_run" || $subdirectory == "eff_vs_run") {
         echo '<div id="2024" class="container-fluid">
@@ -650,7 +655,6 @@ $subdirectory = end($path_parts); // Get the last part of the path
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Contact Us</h2>
-          <p> Ioannis Paraskevas - <a href="mailto:ioannis.paraskevas@cern.ch">ioannis.paraskevas@cern.ch</a></p>
           <p> Nikolaos Plastiras - <a href="mailto:nikolaos.plastiras@cern.ch">nikolaos.plastiras@cern.ch</a></p>
           <p>Panagiotis Katris - <a href="mailto:panagiotis.katris@cern.ch">panagiotis.katris@cern.ch</a></p>
       </div>
