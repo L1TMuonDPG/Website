@@ -5,7 +5,6 @@
 
 // 1. EVENTS CONFIGURATION (ICS/iCal)
 // Paste your Indico Category ics export link here.
-// Example: https://indico.cern.ch/export/categ/2091.ics?from=-31d
 $events_ical_url = "https://indico.cern.ch/category/2091/events.ics?user_token=165296_Fi1YuX-ZTsdUsz5Of3SegqsM0NP9PVZqs7skqxV677k"; // Leave empty to hide the events box, or paste URL to enable.
 
 // 2. FILE SETTINGS
@@ -94,16 +93,329 @@ if (!$full_path || !is_dir($full_path)) die("Directory not found.");
 
 // Directory Description Logic
 function get_directory_description($subdir) {
-    if ($subdir == "2025") {
-        return '<h4>Plots for 2025</h4><p>Total certified: 115.65 <span>fb<sup>-1</sup></span>. <br>Includes Eras <code>2025C-G</code>, Combined <code>2025All</code>, and comparisons.</p>';
-    } elseif ($subdir == "2024") {
-        return '<h4>Plots for 2024</h4><p>Total certified: 109 <span>fb<sup>-1</sup></span>.</p>';
-    } elseif ($subdir == "eff") {
-        return '<h4>Efficiency plots</h4><p>L1T muon efficiency vs offline muon pT, &eta;, &phi;.</p>';
-    }
-    return "";
-}
+    // Style settings
+    $title_class = "text-primary-custom mb-2 desc-title"; 
+    $text_class = "mb-3 desc-text"; 
+    
+    // 1. STANDARD WRAPPER (For eff_ directories)
+    $wrap = function($title, $text) use ($title_class, $text_class) {
+        return "<div>
+                    <h2 class='$title_class'>$title</h2>
+                    <div class='$text_class'>$text</div>
+                </div><hr class='my-4 opacity-10'>";
+    };
 
+    // 2. ERA WRAPPER (Clean Layout: No boxes, just data points)
+    $wrap_era = function($title, $text, $runs, $fills, $dates) use ($title_class, $text_class) {
+        return "
+        <div>
+            <h2 class='$title_class'>$title</h2>
+            <div class='$text_class'>$text</div>
+            
+            <div class='d-flex flex-wrap gap-5 mt-2 pt-1'>
+                <div>
+                    <span class='d-block small text-muted mb-1' style='font-size: 0.75rem; letter-spacing: 0.5px;'>Runs</span>
+                    <span class='fw-bold text-dark' style='font-family: monospace; font-size: 1.1rem;'>
+                        <i class='bi bi-hash me-1 text-primary-custom opacity-50'></i>$runs
+                    </span>
+                </div>
+                <div>
+                    <span class='d-block small text-muted mb-1' style='font-size: 0.75rem; letter-spacing: 0.5px;'>Fills</span>
+                    <span class='fw-bold text-dark' style='font-family: monospace; font-size: 1.1rem;'>
+                        <i class='bi bi-fuel-pump me-1 text-primary-custom opacity-50'></i>$fills
+                    </span>
+                </div>
+                <div>
+                    <span class='d-block small text-muted mb-1' style='font-size: 0.75rem; letter-spacing: 0.5px;'>Recorded</span>
+                    <span class='fw-bold text-dark' style='font-size: 1rem;'>
+                        <i class='bi bi-calendar-event me-1 text-primary-custom opacity-50'></i>$dates
+                    </span>
+                </div>
+            </div>
+        </div><hr class='my-4 opacity-10'>";
+    };
+
+return match($subdir) {
+        // --- 2025 ---
+        "2025" => $wrap("Plots for 2025", 
+            "For 2025, a total of 115.65 fb<sup>-1</sup> of pp luminosity was certified. <br>Plots are organized by Individual Eras (C-G), Combined data (All), and Comparisons (vs).",
+            "115.65 fb<sup>-1</sup> Certified"),
+        "2025All" => $wrap_era("Plots for 2025",
+            "A total of 115.65 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2025 data-taking period.",
+            "392174 - 398903", "10638 - 11245", "May 16 - Nov 05"),
+        "2025C" => $wrap_era("Plots for 2025C", 
+            "A total of 20.78 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "392174 - 393087", "10638 - 10697", "May 16 - Jun 07"),
+        "2025D" => $wrap_era("Plots for 2025D", 
+            "A total of 25.29 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "394393 - 395948", "10821 - 10956", "Jun 18 - Aug 18"),
+        "2025E" => $wrap_era("Plots for 2025E", 
+            "A total of 14.00 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "395982 - 396422", "10959 - 10997", "Aug 18 - Aug 31"),
+        "2025F" => $wrap_era("Plots for 2025F", 
+            "A total of 30.35 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "396629 - 397853", "11044 - 11135", "Sep 07 - Oct 05"),
+        "2025G" => $wrap_era("Plots for 2025G", 
+            "A total of 25.23 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "397954 - 398903", "11164 - 11245", "Oct 08 - Nov 05"),
+
+        // --- 2024 ---
+        "2024" => $wrap("Plots for 2024", 
+            "For Level-1 Trigger, 2024 was the smoothest year of Run-3 pp data-taking so far.<br>A total of 123/113/109 fb<sup>-1</sup> of pp luminosity was delivered/recorded/certified.", 
+            "109 fb<sup>-1</sup> Certified"),
+        "2024All" => $wrap_era("Plots for 2024", 
+            "A total of 109 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2024 data-taking period.",
+            "378981 - 386974", "9473 - 10230", "Apr 05 - Oct 15"),
+        "2024B" => $wrap_era("Plots for 2024B", 
+            "A total of 0.13 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "378981 - 379391", "9473 - 9514", "Apr 05 - Apr 13"),
+        "2024C" => $wrap_era("Plots for 2024C", 
+            "A total of 7.24 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "379415 - 380238", "9517 - 9579", "Apr 14 - May 01"),
+        "2024D" => $wrap_era("Plots for 2024D", 
+            "A total of 7.96 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "380255 - 380947", "9585 - 9653", "May 02 - May 20"),
+        "2024E" => $wrap_era("Plots for 2024E", 
+            "A total of 11.32 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "380956 - 381594", "9654 - 9717", "May 20 - Jun 05"),
+        "2024F" => $wrap_era("Plots for 2024F", 
+            "A total of 27.76 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "381984 - 383779", "9801 - 9943", "Jun 19 - Jul 28"),
+        "2024G" => $wrap_era("Plots for 2024G", 
+            "A total of 37.77 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "383811 - 385801", "9945 - 10119", "Jul 29 - Sep 16"),
+        "2024H" => $wrap_era("Plots for 2024H", 
+            "A total of 5.44 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "385836 - 386319", "10122 - 10144", "Sep 16 - Sep 26"),
+        "2024I" => $wrap_era("Plots for 2024I", 
+            "A total of 11.49 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "386446 - 386974", "10189 - 10230", "Oct 02 - Oct 15"),
+
+        // --- 2023 ---
+        "2023" => $wrap("Plots for 2023", "For 2023, a total of 29 fb<sup>-1</sup> was delivered of which 28.41 fb<sup>-1</sup> was certified. <br>Plots are organized by individual eras (B,C,D) as well as combined 2023 data (All)."),
+        "2023All" => $wrap_era("Plots for 2023", 
+            "A total of 28.41 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2023 data-taking period.",
+            "366403 - 371225", "8637 - 9073", "Apr 21 - Jul 16"),
+        "2023B" => $wrap_era("Plots for 2023B", 
+            "A total of  <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "366403 - 367079", "8637 - 8725", "Apr 21 - May 06"),
+        "2023C" => $wrap_era("Plots for 2023C", 
+            "A total of  <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "367094 - 369694", "8728 - 8997", "May 06 - Jun 28"),
+        "2023D" => $wrap_era("Plots for 2023D", 
+            "A total of  <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "369844 - 371225", "8999 - 9073", "Jun 28 - Jul 16"),
+
+        // --- General Categories ---
+        "eff" => $wrap("Efficiency Plots", 
+            "Plots that show the L1T muon efficiency as a function of offline-reconstructed muon pT, &eta;, &phi; or &eta;-&phi; for:<br>
+            <span style='color: #5790fc;'>&#9679;</span> <strong>uGMT:</strong> ($|\\eta|$ $\\le$ 2.4)<br>
+            <span style='color: #f89c20;'>&#9679;</span> <strong>BMTF:</strong> ($|\\eta|$ $\\le$ 0.83)<br>
+            <span style='color: #e42536;'>&#9679;</span> <strong>OMTF:</strong> (0.83 $\\le$ $|\\eta|$ $\\le$ 1.24)<br>
+            <span style='color: #964a8b;'>&#9679;</span> <strong>EMTF:</strong> (1.24 $\\le$ $|\\eta|$ $\\le$ 2.4)<br>
+            The plots are divided into two working points: one for an L1T muon pT threshold of 22 GeV and an L1T quality cut of 12, and the second for an L1T muon pT threshold of 5 GeV with an L1T quality cut of 8 GeV.<br>"),
+        
+        "misid" => $wrap("Charge Misidentification", 
+            "Plots showing the L1T muon charge misidentification probability as a function of offline-reconstructed muon pT and &eta;-&phi;.<br>
+            <strong>WP:</strong> 22 GeV / Qual 12. Matched if &Delta;R(L1, offline) < 0.1."),
+        
+        "eff_qual" => $wrap("Quality Cut Efficiency Scan", 
+            "Comparison of BMTF efficiency for different L1T Quality cuts at a fixed L1 p<sub>T</sub> $\\ge$ 22 GeV.<br>
+            <span style='color: #5790fc;'>&#9679;</span> <strong>Quality &ge; 12</strong><br>
+            <span style='color: #f89c20;'>&#9679;</span> <strong>Quality &ge; 13</strong><br>
+            <span style='color: #e42536;'>&#9679;</span> <strong>Quality &ge; 14</strong><br>
+            <span style='color: #964a8b;'>&#9679;</span> <strong>Quality &ge; 15</strong><br>
+            The new high quality working points are chosen to have very high L1T muon purity and recover muons in low pT region while staying within the available L1T rate budget.<br>
+            Plots include efficiency vs offline p<sub>T</sub>, &eta;, and &phi;."),
+
+        "eff_run" => $wrap("Efficiency vs Run Number", "Average L1T muon efficiency as a function of the run number."),
+        "eff_vs_run" => $wrap("Efficiency vs Run Number", "Average L1T muon efficiency as a function of the run number."),
+        
+        "misid_run" => $wrap("Charge misidentification vs Run Number", "Average L1T charge misidentification probability as a function of the run number."),
+        "misid_vs_run" => $wrap("Charge misidentification vs Run Number", "Average L1T charge misidentification probability as a function of the run number."),
+
+        // --- Specific Working Points ---
+        "eff_22_11" => $wrap("BMTF Efficiency Comparison", 
+            "Comparison of L1T efficiency in the Barrel Muon Track Finder ($|\\eta|$ $\\le$ 0.83) between the standard SingleMu22 and the high quality, low p<sub>T</sub> working point.<br>
+            <span class='text-primary'>&#9679;</span> <strong>Standard:</strong> L1 p<sub>T</sub> $\\ge$ 22 GeV, Qual $\\ge$ 12 (Offline p<sub>T</sub> $\\ge$ 26 GeV)<br>
+            <span class='text-danger'>&#9679;</span> <strong>High Quality:</strong> L1 p<sub>T</sub> $\\ge$ 11 GeV, Qual $\\ge$ 14 (Offline p<sub>T</sub> $\\ge$ 15 GeV)<br>
+            Plots include efficiency vs offline p<sub>T</sub>, &eta;, and &phi;."),
+            
+        "eff_22_15" => $wrap("Global Muon Trigger Efficiency Comparison", 
+            "Comparison of L1T efficiency in the Global Muon Trigger ($|\\eta|$ $\\le$ 2.4) between the standard SingleMu22 and the DoubleMu15 working point.<br>
+            <span class='text-primary'>&#9679;</span> <strong>SingleMu22:</strong> L1 p<sub>T</sub> $\\ge$ 22 GeV, Quality $\\ge$ 12 (Offline p<sub>T</sub> $\\ge$ 26 GeV)<br>
+            <span class='text-danger'>&#9679;</span> <strong>DoubleMu15:</strong> L1 p<sub>T</sub> $\\ge$ 15 GeV, Quality $\\ge$ 8 (Offline p<sub>T</sub> $\\ge$ 19 GeV)<br>
+            Plots include efficiency vs offline p<sub>T</sub>, &eta;, and &phi;."),
+        
+        "eff_22_15_7_3" => $wrap("Multi-Threshold Efficiency", 
+            "Comparison of L1T efficiency across all track finder regions (uGMT, BMTF, OMTF, EMTF) for four distinct working points ranging from high to open quality.<br>
+            <span style='color: #5790fc;'>&#9679;</span> <strong>SingleMu22:</strong> L1 p<sub>T</sub> $\\ge$ 22 GeV, Quality $\\ge$ 12 (Offline p<sub>T</sub> $\\ge$ 26 GeV)<br>
+            <span style='color: #f89c20;'>&#9679;</span> <strong>SingleMu15:</strong> L1 p<sub>T</sub> $\\ge$ 15 GeV, Quality $\\ge$ 8 (Offline p<sub>T</sub> $\\ge$ 19 GeV)<br>
+            <span style='color: #e42536;'>&#9679;</span> <strong>SingleMu7:</strong> L1 p<sub>T</sub> $\\ge$ 7 GeV, Quality $\\ge$ 4 (Offline p<sub>T</sub> $\\ge$ 11 GeV)<br>
+            <span style='color: #964a8b;'>&#9679;</span> <strong>SingleMu3:</strong> L1 p<sub>T</sub> $\\ge$ 3 GeV, Quality $\\ge$ 0 (Offline p<sub>T</sub> $\\ge$ 7 GeV)<br>
+            Plots include efficiency vs offline p<sub>T</sub>, &eta;, and &phi; for each track finder."),
+        
+        // --- All Working Points ---
+        "eff_all" => $wrap("Efficiency Plots", 
+            "Efficiency plots for different working points, depending on the L1T quality and the L1T muon p<sub>T</sub> cuts.<br>
+            <ul class='mt-2 mb-3 ps-3'>
+                <li class='mb-1'>For the L1T quality, four working points are used: 'Single Quality' (<strong>12</strong>), 'Double Quality' (<strong>8</strong>), 'Open Quality' (<strong>4</strong>), and a working point without any quality cut (<strong>0</strong>).</li>
+                <li>For each quality working point, the following set of L1T muon p<sub>T</sub> cuts are used: <strong>26, 22, 20, 15, 10, 7, 5, 3 GeV</strong>.</li>
+            </ul>
+            Plots show efficiency as a function of offline p<sub>T</sub>, &eta;, &phi;, and 2D &eta;-&phi; maps for:<br>
+            <span style='color: #5790fc;'>&#9679;</span> <strong>uGMT:</strong> ($|\\eta|$ $\\le$ 2.4)<br>
+            <span style='color: #f89c20;'>&#9679;</span> <strong>BMTF:</strong> ($|\\eta|$ $\\le$ 0.83)<br>
+            <span style='color: #e42536;'>&#9679;</span> <strong>OMTF:</strong> (0.83 $\\le$ $|\\eta|$ $\\le$ 1.24)<br>
+            <span style='color: #964a8b;'>&#9679;</span> <strong>EMTF:</strong> (1.24 $\\le$ $|\\eta|$ $\\le$ 2.4)<br>
+            <div class='mt-3 small text-muted border-top pt-2'>
+                <div><i class='bi bi-tag-fill me-1'></i> Naming scheme: <strong>L1MuX_Y</strong> (where X = p<sub>T</sub> cut, Y = Quality cut)</div>
+                <div><i class='bi bi-info-circle me-1'></i> Offline cut applied is <strong>p<sub>T</sub><sup>offline</sup> $\\ge$ p<sub>T</sub><sup>L1</sup> + 4 GeV</strong>.</div>
+            </div>"),
+        
+        // --- Comparison Directories ---
+        "eff_comparison_Qual0" => $wrap("Efficiency Comparisons (Quality 0)", 
+            "Comparative studies with no quality cut ($\ge$ 0).<br>
+            Two different comparison categories are provided::<br>
+            <ul class='mt-2 mb-3 ps-3'>
+                <li class='mb-1'> Comparison between seven different <strong>&eta; regions</strong> (for fixed p<sub>T</sub><sup>L1</sup> threshold):
+                    <div class='col-md-6 mt-3 mt-md-0'>
+                    <ul class='list-unstyled mb-0 small'>
+                        <li><span style='color: #e76300;'>&#9679;</span> <strong>uGMT</strong> ($|\\eta| \\le 2.4$)</li>
+                        <li><span style='color: #3f90da;'>&#9679;</span> <strong>BMTF</strong> ($|\\eta| \\le 0.83$)</li>
+                        <li><span style='color: #ffa90e;'>&#9679;</span> <strong>OMTF</strong> ($0.83 \\le |\\eta| \\le 1.24$)</li>
+                        <li><span style='color: #bd1f01;'>&#9679;</span> <strong>EMTF</strong> ($1.24 \\le |\\eta| \\le 2.4$)</li>
+                        <li><span style='color: #94a4a2;'>&#9679;</span> <strong>EMTF1</strong> ($1.24 \\le |\\eta| \\le 1.6$)</li>
+                        <li><span style='color: #832db6;'>&#9679;</span> <strong>EMTF2</strong> ($1.6 \\le |\\eta| \\le 2.1$)</li>
+                        <li><span style='color: #a96b59;'>&#9679;</span> <strong>EMTF3</strong> ($2.1 \\le |\\eta| \\le 2.4$)</li>
+                    </ul>
+                    </div>
+                </li>
+                <li> Comparison between seven different <strong>p<sub>T</sub> thresholds</strong> (for fixed &eta; region):
+                    <div class='col-md-6'>
+                    <ul class='list-unstyled mb-0 small'>
+                        <li><span style='color: #1845fb;'>&#9679;</span> <strong>L1Mu26_0</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 26)</li>
+                        <li><span style='color: #ff5e02;'>&#9679;</span> <strong>L1Mu22_0</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 22)</li>
+                        <li><span style='color: #c91f16;'>&#9679;</span> <strong>L1Mu20_0</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 20)</li>
+                        <li><span style='color: #c849a9;'>&#9679;</span> <strong>L1Mu15_0</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 15)</li>
+                        <li><span style='color: #adad7d;'>&#9679;</span> <strong>L1Mu10_0</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 10)</li>
+                        <li><span style='color: #86c8dd;'>&#9679;</span> <strong>L1Mu5_0</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 5)</li>
+                        <li><span style='color: #578dff;'>&#9679;</span> <strong>L1Mu3_0</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 3)</li>
+                    </ul>
+                </li>
+                </div>
+            </ul>
+            <div class='mt-3 small text-muted border-top pt-2'>
+                <i class='bi bi-info-circle me-1'></i> Offline cut applied is <strong>p<sub>T</sub><sup>offline</sup> $\\ge$ p<sub>T</sub><sup>L1</sup> + 4 GeV</strong>.
+            </div>"),
+
+        "eff_comparison_Qual4" => $wrap("Efficiency Comparisons (Quality 4)", 
+            "Comparative studies for the Open Quality ($\ge$ 4) working point.<br>
+            Two different comparison categories are provided::<br>
+            <ul class='mt-2 mb-3 ps-3'>
+                <li class='mb-1'> Comparison between seven different <strong>&eta; regions</strong> (for fixed p<sub>T</sub><sup>L1</sup> threshold):
+                    <div class='col-md-6 mt-3 mt-md-0'>
+                    <ul class='list-unstyled mb-0 small'>
+                        <li><span style='color: #e76300;'>&#9679;</span> <strong>uGMT</strong> ($|\\eta| \\le 2.4$)</li>
+                        <li><span style='color: #3f90da;'>&#9679;</span> <strong>BMTF</strong> ($|\\eta| \\le 0.83$)</li>
+                        <li><span style='color: #ffa90e;'>&#9679;</span> <strong>OMTF</strong> ($0.83 \\le |\\eta| \\le 1.24$)</li>
+                        <li><span style='color: #bd1f01;'>&#9679;</span> <strong>EMTF</strong> ($1.24 \\le |\\eta| \\le 2.4$)</li>
+                        <li><span style='color: #94a4a2;'>&#9679;</span> <strong>EMTF1</strong> ($1.24 \\le |\\eta| \\le 1.6$)</li>
+                        <li><span style='color: #832db6;'>&#9679;</span> <strong>EMTF2</strong> ($1.6 \\le |\\eta| \\le 2.1$)</li>
+                        <li><span style='color: #a96b59;'>&#9679;</span> <strong>EMTF3</strong> ($2.1 \\le |\\eta| \\le 2.4$)</li>
+                    </ul>
+                    </div>
+                </li>
+                <li> Comparison between seven different <strong>p<sub>T</sub> thresholds</strong> (for fixed &eta; region):
+                    <div class='col-md-6'>
+                    <ul class='list-unstyled mb-0 small'>
+                        <li><span style='color: #1845fb;'>&#9679;</span> <strong>L1Mu26_4</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 26)</li>
+                        <li><span style='color: #ff5e02;'>&#9679;</span> <strong>L1Mu22_4</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 22)</li>
+                        <li><span style='color: #c91f16;'>&#9679;</span> <strong>L1Mu20_4</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 20)</li>
+                        <li><span style='color: #c849a9;'>&#9679;</span> <strong>L1Mu15_4</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 15)</li>
+                        <li><span style='color: #adad7d;'>&#9679;</span> <strong>L1Mu10_4</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 10)</li>
+                        <li><span style='color: #86c8dd;'>&#9679;</span> <strong>L1Mu5_4</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 5)</li>
+                        <li><span style='color: #578dff;'>&#9679;</span> <strong>L1Mu3_4</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 3)</li>
+                    </ul>
+                </li>
+                </div>
+            </ul>
+            <div class='mt-3 small text-muted border-top pt-2'>
+                <i class='bi bi-info-circle me-1'></i> Offline cut applied is <strong>p<sub>T</sub><sup>offline</sup> $\\ge$ p<sub>T</sub><sup>L1</sup> + 4 GeV</strong>.
+            </div>"),          
+
+        "eff_comparison_Qual8" => $wrap("Efficiency Comparisons (Quality 8)", 
+            "Comparative studies for the Double Quality ($\ge$ 8) working point.<br>
+            Two different comparison categories are provided::<br>
+            <ul class='mt-2 mb-3 ps-3'>
+                <li class='mb-1'> Comparison between seven different <strong>&eta; regions</strong> (for fixed p<sub>T</sub><sup>L1</sup> threshold):
+                    <div class='col-md-6 mt-3 mt-md-0'>
+                    <ul class='list-unstyled mb-0 small'>
+                        <li><span style='color: #e76300;'>&#9679;</span> <strong>uGMT</strong> ($|\\eta| \\le 2.4$)</li>
+                        <li><span style='color: #3f90da;'>&#9679;</span> <strong>BMTF</strong> ($|\\eta| \\le 0.83$)</li>
+                        <li><span style='color: #ffa90e;'>&#9679;</span> <strong>OMTF</strong> ($0.83 \\le |\\eta| \\le 1.24$)</li>
+                        <li><span style='color: #bd1f01;'>&#9679;</span> <strong>EMTF</strong> ($1.24 \\le |\\eta| \\le 2.4$)</li>
+                        <li><span style='color: #94a4a2;'>&#9679;</span> <strong>EMTF1</strong> ($1.24 \\le |\\eta| \\le 1.6$)</li>
+                        <li><span style='color: #832db6;'>&#9679;</span> <strong>EMTF2</strong> ($1.6 \\le |\\eta| \\le 2.1$)</li>
+                        <li><span style='color: #a96b59;'>&#9679;</span> <strong>EMTF3</strong> ($2.1 \\le |\\eta| \\le 2.4$)</li>
+                    </ul>
+                    </div>
+                </li>
+                <li> Comparison between seven different <strong>p<sub>T</sub> thresholds</strong> (for fixed &eta; region):
+                    <div class='col-md-6'>
+                    <ul class='list-unstyled mb-0 small'>
+                        <li><span style='color: #1845fb;'>&#9679;</span> <strong>L1Mu26_8</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 26)</li>
+                        <li><span style='color: #ff5e02;'>&#9679;</span> <strong>L1Mu22_8</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 22)</li>
+                        <li><span style='color: #c91f16;'>&#9679;</span> <strong>L1Mu20_8</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 20)</li>
+                        <li><span style='color: #c849a9;'>&#9679;</span> <strong>L1Mu15_8</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 15)</li>
+                        <li><span style='color: #adad7d;'>&#9679;</span> <strong>L1Mu10_8</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 10)</li>
+                        <li><span style='color: #86c8dd;'>&#9679;</span> <strong>L1Mu5_8</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 5)</li>
+                        <li><span style='color: #578dff;'>&#9679;</span> <strong>L1Mu3_8</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 3)</li>
+                    </ul>
+                </li>
+                </div>
+            </ul>
+            <div class='mt-3 small text-muted border-top pt-2'>
+                <i class='bi bi-info-circle me-1'></i> Offline cut applied is <strong>p<sub>T</sub><sup>offline</sup> $\\ge$ p<sub>T</sub><sup>L1</sup> + 4 GeV</strong>.
+            </div>"),           
+
+        "eff_comparison_Qual12" => $wrap("Efficiency Comparisons (Quality 12)", 
+            "Comparative studies for the Single Quality ($\ge$ 12) working point.<br>
+            Two different comparison categories are provided::<br>
+            <ul class='mt-2 mb-3 ps-3'>
+                <li class='mb-1'> Comparison between seven different <strong>&eta; regions</strong> (for fixed p<sub>T</sub><sup>L1</sup> threshold):
+                    <div class='col-md-6 mt-3 mt-md-0'>
+                    <ul class='list-unstyled mb-0 small'>
+                        <li><span style='color: #e76300;'>&#9679;</span> <strong>uGMT</strong> ($|\\eta| \\le 2.4$)</li>
+                        <li><span style='color: #3f90da;'>&#9679;</span> <strong>BMTF</strong> ($|\\eta| \\le 0.83$)</li>
+                        <li><span style='color: #ffa90e;'>&#9679;</span> <strong>OMTF</strong> ($0.83 \\le |\\eta| \\le 1.24$)</li>
+                        <li><span style='color: #bd1f01;'>&#9679;</span> <strong>EMTF</strong> ($1.24 \\le |\\eta| \\le 2.4$)</li>
+                        <li><span style='color: #94a4a2;'>&#9679;</span> <strong>EMTF1</strong> ($1.24 \\le |\\eta| \\le 1.6$)</li>
+                        <li><span style='color: #832db6;'>&#9679;</span> <strong>EMTF2</strong> ($1.6 \\le |\\eta| \\le 2.1$)</li>
+                        <li><span style='color: #a96b59;'>&#9679;</span> <strong>EMTF3</strong> ($2.1 \\le |\\eta| \\le 2.4$)</li>
+                    </ul>
+                    </div>
+                </li>
+                <li> Comparison between seven different <strong>p<sub>T</sub> thresholds</strong> (for fixed &eta; region):
+                    <div class='col-md-6'>
+                    <ul class='list-unstyled mb-0 small'>
+                        <li><span style='color: #1845fb;'>&#9679;</span> <strong>L1Mu26_12</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 26)</li>
+                        <li><span style='color: #ff5e02;'>&#9679;</span> <strong>L1Mu22_12</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 22)</li>
+                        <li><span style='color: #c91f16;'>&#9679;</span> <strong>L1Mu20_12</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 20)</li>
+                        <li><span style='color: #c849a9;'>&#9679;</span> <strong>L1Mu15_12</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 15)</li>
+                        <li><span style='color: #adad7d;'>&#9679;</span> <strong>L1Mu10_12</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 10)</li>
+                        <li><span style='color: #86c8dd;'>&#9679;</span> <strong>L1Mu5_12</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 5)</li>
+                        <li><span style='color: #578dff;'>&#9679;</span> <strong>L1Mu3_12</strong> (p<sub>T</sub><sup>L1</sup> $\\ge$ 3)</li>
+                    </ul>
+                </li>
+                </div>
+            </ul>
+            <div class='mt-3 small text-muted border-top pt-2'>
+                <i class='bi bi-info-circle me-1'></i> Offline cut applied is <strong>p<sub>T</sub><sup>offline</sup> $\\ge$ p<sub>T</sub><sup>L1</sup> + 4 GeV</strong>.
+            </div>"),
+            
+        default => ""
+    };
+}
 // Scan Content
 $directories = [];
 $nested_plots = []; 
@@ -350,9 +662,9 @@ if ($is_home_page && !empty($events_ical_url)) {
         <?php endif; ?>
 
         <?php if (!empty($dir_desc_html)): ?>
-        <div class="alert alert-secondary shadow-sm mb-4 border-start border-4 border-secondary">
-            <?= $dir_desc_html ?>
-        </div>
+            <div class="mb-5 ms-1">
+                <?= $dir_desc_html ?>
+            </div>
         <?php endif; ?>
 
         <?php if (!empty($directories)): ?>
@@ -713,5 +1025,20 @@ if ($is_home_page && !empty($events_ical_url)) {
         g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
       })();
     </script>
+
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
 </body>
 </html>
