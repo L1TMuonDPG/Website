@@ -105,7 +105,7 @@ function get_directory_description($subdir) {
                 </div><hr class='my-4 opacity-10'>";
     };
 
-    // 2. ERA WRAPPER (Clean Layout: No boxes, just data points)
+   // 2. ERA WRAPPER (Clean Layout: Adaptive text colors)
     $wrap_era = function($title, $text, $runs, $fills, $dates) use ($title_class, $text_class) {
         return "
         <div>
@@ -115,19 +115,19 @@ function get_directory_description($subdir) {
             <div class='d-flex flex-wrap gap-5 mt-2 pt-1'>
                 <div>
                     <span class='d-block small text-muted mb-1' style='font-size: 0.75rem; letter-spacing: 0.5px;'>Runs</span>
-                    <span class='fw-bold text-dark' style='font-family: monospace; font-size: 1.1rem;'>
+                    <span class='fw-bold text-body-emphasis' style='font-family: monospace; font-size: 1.1rem;'>
                         <i class='bi bi-hash me-1 text-primary-custom opacity-50'></i>$runs
                     </span>
                 </div>
                 <div>
                     <span class='d-block small text-muted mb-1' style='font-size: 0.75rem; letter-spacing: 0.5px;'>Fills</span>
-                    <span class='fw-bold text-dark' style='font-family: monospace; font-size: 1.1rem;'>
+                    <span class='fw-bold text-body-emphasis' style='font-family: monospace; font-size: 1.1rem;'>
                         <i class='bi bi-fuel-pump me-1 text-primary-custom opacity-50'></i>$fills
                     </span>
                 </div>
                 <div>
                     <span class='d-block small text-muted mb-1' style='font-size: 0.75rem; letter-spacing: 0.5px;'>Recorded</span>
-                    <span class='fw-bold text-dark' style='font-size: 1rem;'>
+                    <span class='fw-bold text-body-emphasis' style='font-size: 1rem;'>
                         <i class='bi bi-calendar-event me-1 text-primary-custom opacity-50'></i>$dates
                     </span>
                 </div>
