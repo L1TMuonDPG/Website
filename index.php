@@ -226,7 +226,7 @@ return match($subdir) {
             <span style='color: #e42536;'>&#9679;</span> <strong>Quality &ge; 14</strong><br>
             <span style='color: #964a8b;'>&#9679;</span> <strong>Quality &ge; 15</strong><br>
             The new high quality working points are chosen to have very high L1T muon purity and recover muons in low pT region while staying within the available L1T rate budget.<br>
-            Plots include efficiency vs offline p<sub>T</sub>, &eta;, and &phi;."),
+            Plots include efficiency vs offline p<sub>T</sub>, &eta;, &phi;, and number of primary vertices."),
 
         "eff_run" => $wrap("Efficiency vs Run Number", "Average L1T muon efficiency as a function of the run number."),
         "eff_vs_run" => $wrap("Efficiency vs Run Number", "Average L1T muon efficiency as a function of the run number."),
@@ -245,7 +245,7 @@ return match($subdir) {
             "Comparison of L1T efficiency in the Global Muon Trigger ($|\\eta|$ $\\le$ 2.4) between the standard SingleMu22 and the DoubleMu15 working point.<br>
             <span class='text-primary'>&#9679;</span> <strong>SingleMu22:</strong> L1 p<sub>T</sub> $\\ge$ 22 GeV, Quality $\\ge$ 12 (Offline p<sub>T</sub> $\\ge$ 26 GeV)<br>
             <span class='text-danger'>&#9679;</span> <strong>DoubleMu15:</strong> L1 p<sub>T</sub> $\\ge$ 15 GeV, Quality $\\ge$ 8 (Offline p<sub>T</sub> $\\ge$ 19 GeV)<br>
-            Plots include efficiency vs offline p<sub>T</sub>, &eta;, and &phi;."),
+            Plots include efficiency vs offline p<sub>T</sub>, &eta;, &phi;, and number of primary vertices."),
         
         "eff_22_15_7_3" => $wrap("Multi-Threshold Efficiency", 
             "Comparison of L1T efficiency across all track finder regions (uGMT, BMTF, OMTF, EMTF) for four distinct working points ranging from high to open quality.<br>
@@ -253,7 +253,7 @@ return match($subdir) {
             <span style='color: #f89c20;'>&#9679;</span> <strong>SingleMu15:</strong> L1 p<sub>T</sub> $\\ge$ 15 GeV, Quality $\\ge$ 8 (Offline p<sub>T</sub> $\\ge$ 19 GeV)<br>
             <span style='color: #e42536;'>&#9679;</span> <strong>SingleMu7:</strong> L1 p<sub>T</sub> $\\ge$ 7 GeV, Quality $\\ge$ 4 (Offline p<sub>T</sub> $\\ge$ 11 GeV)<br>
             <span style='color: #964a8b;'>&#9679;</span> <strong>SingleMu3:</strong> L1 p<sub>T</sub> $\\ge$ 3 GeV, Quality $\\ge$ 0 (Offline p<sub>T</sub> $\\ge$ 7 GeV)<br>
-            Plots include efficiency vs offline p<sub>T</sub>, &eta;, and &phi; for each track finder."),
+            Plots include efficiency vs offline p<sub>T</sub>, &eta;, &phi;, and number of primary vertices for each track finder."),
         
         // --- All Working Points ---
         "eff_all" => $wrap("Efficiency Plots", 
@@ -262,7 +262,7 @@ return match($subdir) {
                 <li class='mb-1'>For the L1T quality, four working points are used: 'Single Quality' (<strong>12</strong>), 'Double Quality' (<strong>8</strong>), 'Open Quality' (<strong>4</strong>), and a working point without any quality cut (<strong>0</strong>).</li>
                 <li>For each quality working point, the following set of L1T muon p<sub>T</sub> cuts are used: <strong>26, 22, 20, 15, 10, 7, 5, 3 GeV</strong>.</li>
             </ul>
-            Plots show efficiency as a function of offline p<sub>T</sub>, &eta;, &phi;, and 2D &eta;-&phi; maps for:<br>
+            Plots show efficiency as a function of offline p<sub>T</sub>, &eta;, &phi;, and number of primary vertices, as well as the 2D efficiency distribution in the &eta;-&phi; plane for:<br>
             <span style='color: #5790fc;'>&#9679;</span> <strong>uGMT:</strong> ($|\\eta|$ $\\le$ 2.4)<br>
             <span style='color: #f89c20;'>&#9679;</span> <strong>BMTF:</strong> ($|\\eta|$ $\\le$ 0.83)<br>
             <span style='color: #e42536;'>&#9679;</span> <strong>OMTF:</strong> (0.83 $\\le$ $|\\eta|$ $\\le$ 1.24)<br>
