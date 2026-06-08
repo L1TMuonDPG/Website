@@ -138,33 +138,33 @@ function get_directory_description($subdir) {
 return match($subdir) {
         // --- 2025 ---
         "2025" => $wrap("Plots for 2025", 
-            "For 2025, a total of 115.65 fb<sup>-1</sup> of pp luminosity was certified. <br>Plots are organized by Individual Eras (C-G), Combined data (All), and Comparisons (vs).",
-            "115.65 fb<sup>-1</sup> Certified"),
+            "For 2025, a total of 125.70/114.85/110.73 fb<sup>-1</sup> of pp luminosity was delivered/recorded/certified. <br>Plots are organized by Individual Eras (C-G), Combined data (All), and Comparisons (vs).",
+            "110.73 fb<sup>-1</sup> Certified"),
         "2025All" => $wrap_era("Plots for 2025",
-            "A total of 115.65 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2025 data-taking period.",
+            "A total of 110.73 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2025 data-taking period.",
             "392174 - 398903", "10638 - 11245", "May 16 - Nov 05"),
         "2025C" => $wrap_era("Plots for 2025C", 
-            "A total of 20.78 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "A total of 21.87 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "392174 - 393087", "10638 - 10697", "May 16 - Jun 07"),
         "2025D" => $wrap_era("Plots for 2025D", 
-            "A total of 25.29 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "A total of 25.87 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "394393 - 395948", "10821 - 10956", "Jun 18 - Aug 18"),
         "2025E" => $wrap_era("Plots for 2025E", 
             "A total of 14.00 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "395982 - 396422", "10959 - 10997", "Aug 18 - Aug 31"),
         "2025F" => $wrap_era("Plots for 2025F", 
-            "A total of 30.35 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "A total of 26.50 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "396629 - 397853", "11044 - 11135", "Sep 07 - Oct 05"),
         "2025G" => $wrap_era("Plots for 2025G", 
-            "A total of 25.23 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "A total of 22.24 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "397954 - 398903", "11164 - 11245", "Oct 08 - Nov 05"),
 
         // --- 2024 ---
         "2024" => $wrap("Plots for 2024", 
-            "For Level-1 Trigger, 2024 was the smoothest year of Run-3 pp data-taking so far.<br>A total of 123/113/109 fb<sup>-1</sup> of pp luminosity was delivered/recorded/certified.", 
-            "109 fb<sup>-1</sup> Certified"),
+            "For Level-1 Trigger, 2024 was the smoothest year of Run-3 pp data-taking so far.<br>A total of 122.81/113.32/109.08 fb<sup>-1</sup> of pp luminosity was delivered/recorded/certified.", 
+            "109.08 fb<sup>-1</sup> Certified"),
         "2024All" => $wrap_era("Plots for 2024", 
-            "A total of 109 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2024 data-taking period.",
+            "A total of 109.08 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2024 data-taking period.",
             "378981 - 386974", "9473 - 10230", "Apr 05 - Oct 15"),
         "2024B" => $wrap_era("Plots for 2024B", 
             "A total of 0.13 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
@@ -188,22 +188,22 @@ return match($subdir) {
             "A total of 5.44 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "385836 - 386319", "10122 - 10144", "Sep 16 - Sep 26"),
         "2024I" => $wrap_era("Plots for 2024I", 
-            "A total of 11.49 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "A total of 11.47 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "386446 - 386974", "10189 - 10230", "Oct 02 - Oct 15"),
 
         // --- 2023 ---
-        "2023" => $wrap("Plots for 2023", "For 2023, a total of 29 fb<sup>-1</sup> was delivered of which 28.41 fb<sup>-1</sup> was certified. <br>Plots are organized by individual eras (B,C,D) as well as combined 2023 data (All)."),
+        "2023" => $wrap("Plots for 2023", "For 2023, a total of 32.736/30.103/28.397 fb<sup>-1</sup> was delivered/recorded/certified. <br>Plots are organized by individual eras (B,C,D) as well as combined 2023 data (All)."),
         "2023All" => $wrap_era("Plots for 2023", 
-            "A total of 28.41 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2023 data-taking period.",
+            "A total of 28.397 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for the full 2023 data-taking period.",
             "366403 - 371225", "8637 - 9073", "Apr 21 - Jul 16"),
         "2023B" => $wrap_era("Plots for 2023B", 
-            "A total of  <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "A total of 0.641 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "366403 - 367079", "8637 - 8725", "Apr 21 - May 06"),
         "2023C" => $wrap_era("Plots for 2023C", 
-            "A total of  <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "A total of 18.063 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "367094 - 369694", "8728 - 8997", "May 06 - Jun 28"),
         "2023D" => $wrap_era("Plots for 2023D", 
-            "A total of  <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
+            "A total of 9.693 <span>fb<sup>-1</sup></span> of pp luminosity was recorded and certified for this era of data taking.",
             "369844 - 371225", "8999 - 9073", "Jun 28 - Jul 16"),
 
         // --- General Categories ---
@@ -595,12 +595,13 @@ if ($is_home_page && !empty($events_ical_url)) {
                         
                         <h5 class="fw-bold"><i class="bi bi-people-fill me-2"></i>Team Members</h5>
                         <ul class="mb-4">
-                            <li>Nikolaos Plastiras, Muon DPG Run 3 convener, National and Kapodistrian University of Athens</li>
+                            <li>Nikolaos Plastiras, DPG Run 3 Muon Contact, National and Kapodistrian University of Athens</li>
                             <li>Panagiotis Katris, PhD student, National and Kapodistrian University of Athens</li>
                         </ul>
 
                         <h5 class="fw-bold"><i class="bi bi-journal-text me-2"></i>Publications</h5>
                         <ul class="mb-4">
+                            <li><a href="https://cds.cern.ch/record/2961844" target="_blank">Level-1 Trigger Performance in 2025 (13.6 TeV)</a></li>
                             <li><a href="https://cds.cern.ch/record/2917885" target="_blank">Level-1 Trigger Performance in 2024 (13.6 TeV)</a></li>
                             <li><a href="https://cds.cern.ch/record/2868794?ln=en" target="_blank">Level-1 Muon Trigger Performance (2023)</a></li>
                             <li><a href="https://cds.cern.ch/record/2868797" target="_blank">Displaced BMTF Efficiency (2023)</a></li>
